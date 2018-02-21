@@ -204,6 +204,7 @@ public class Cliente extends JFrame implements Observer{
 					String query = txtrSql.getText();
 					ResultSet resultado = modelo.GestorBD.getGestorBD().Select(query);
 					try {
+///////Falta mostrar el contenido del resultado
 						txtrNotificationArea.setText("Numero de tuplas: "+resultado.getFetchSize());
 					} catch (SQLException error) {
 						// TODO Auto-generated catch block
