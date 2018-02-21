@@ -5,77 +5,106 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Observable;
+
 import javax.swing.JOptionPane;
 
-public class GestorBD {
-	
+public class GestorBD extends Observable {
+
 	/**
-	 * atributos
-	 * ConexiónBD debe contener la <ip de la máquina virtual>:<puerto de escucha mysql>/<BD utilizada>
-	 * user: no utilizar root y tener en cuenta que debe tener permisos sobre la BD a utilizar
+	 * atributos ConexiónBD debe contener la <ip de la máquina
+	 * virtual>:<puerto de escucha mysql>/<BD utilizada> user: no utilizar root
+	 * y tener en cuenta que debe tener permisos sobre la BD a utilizar
 	 * 
 	 */
 	private static GestorBD miGestorBD;
-	private String ConexionBD = "jdbc:mysql://192.168.56.10:3306/example";
-	private String user = "cristo";
-	private String password = "";
+	private String user = "root";
+	private String password = "maitane1234";
 	private Connection CanalBD;
-	private Statement Instruccion;
-	private ResultSet Resultado;
-	
+	// private Statement Instruccion;
+
+	private ResultSet resultado;
+	private Connection connection;// = "jdbc:mysql://192.168.56.10:3306/DBer";;
+	private Statement instruccion;
+	private String sentencia;
+
 	/**
 	 * constructora
 	 */
-	private GestorBD(){
-		try{
-			
-			CanalBD = DriverManager.getConnection(ConexionBD, user, password);
-			Instruccion = CanalBD.createStatement();
-		}catch(SQLException e){
-			JOptionPane.showMessageDialog(null, "Error en la conexion con BD\nERROR : "+e.getMessage());
-		}
+	private GestorBD() {
+
 	}
-		
-	/**
-	 * main para pruebas
-	 * @param args
-	 */
-	public static void main (String[]args) {
-		GestorBD.getGestorBD().Select("Select * from mytable");
-	}
-	
+
 	/*
-	 * devolver la bd
+	 * devolver GestorBD
 	 */
-	public static GestorBD getGestorBD(){
-		if(miGestorBD == null){
+	public static GestorBD getGestorBD() {
+		if (miGestorBD == null) {
 			miGestorBD = new GestorBD();
 		}
 		return miGestorBD;
 	}
-	
+
 	/*
-	 * sentencia update, insert y delete
+	 * Crear conexion con la base de datos
 	 */
-	public void Update(String SentenciaSQL){
-		try{
-			Instruccion.executeUpdate(SentenciaSQL);
-		}catch(SQLException e){
-			JOptionPane.showMessageDialog(null, "Error Al modificar\nERROR : "+e.getMessage());			
+	public String OpenConnection(String serverAddress, String serverPort) {
+		String msg = "";
+		try {
+			connection = DriverManager.getConnection("jdbc:mysql://" + serverAddress + ":" + serverPort, user,
+					password);
+			connection.setAutoCommit(true);
+			instruccion = connection.createStatement();
+			msg = "Conexion establecida correctamente.";
+		} catch (SQLException e) {
+			e.printStackTrace();
+			msg = e.getMessage();
 		}
+		return msg;
 	}
-	
+
 	/*
-	 * sentencias select que lo devuelve en un resulset
+	 * Cerrar conexion con la base de datos
 	 */
-	public ResultSet Select(String SentenciaSQL){
-		
-		try{
-			Resultado = Instruccion.executeQuery(SentenciaSQL);
-		}catch(SQLException e){
-			JOptionPane.showMessageDialog(null, "Error al cargar los datos\nERROR : "+e.getMessage());			
+	public String CloseConnection() {
+		String msg = "";
+		try {
+			connection.close();
+			msg = "Conexion cerrada correctamente.";
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			msg = e.getMessage();
 		}
-		
-		return Resultado;
-	}		
+		return msg;
+	}
+
+	/*
+	 * Sentencia update, insert y delete
+	 */
+	public String Update(String SentenciaSQL) {
+		String msg = "";
+		try {
+			instruccion.executeUpdate(SentenciaSQL);
+			
+/////////////////////////////////////////////////////////////Contar el numero de lineas afectadas
+			
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			msg = e.getMessage();
+		}
+		return msg;
+	}
+
+	/*
+	 * Sentencias select que lo devuelve en un resulset
+	 */
+	public ResultSet Select(String SentenciaSQL) {
+		try {
+			resultado = instruccion.executeQuery(SentenciaSQL);
+		}  catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return resultado;
+	}
 }
