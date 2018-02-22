@@ -24,9 +24,8 @@ public class GestorBD extends Observable {
 	// private Statement Instruccion;
 
 	private ResultSet resultado;
-	private Connection connection;// = "jdbc:mysql://192.168.56.10:3306/DBer";;
+	private Connection connection;
 	private Statement instruccion;
-	private String sentencia;
 
 	/**
 	 * constructora
@@ -83,12 +82,10 @@ public class GestorBD extends Observable {
 	 * Sentencia update, insert y delete
 	 */
 	public String Update(String SentenciaSQL) {
-		String msg = "";
+		String msg ;
 		try {
-			instruccion.executeUpdate(SentenciaSQL);
-			
-/////////////////////////////////////////////////////////////Contar el numero de lineas afectadas
-			
+			int num = instruccion.executeUpdate(SentenciaSQL);
+			msg = Integer.toString(num);
 		}  catch (SQLException e) {
 			e.printStackTrace();
 			msg = e.getMessage();

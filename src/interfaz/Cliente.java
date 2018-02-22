@@ -205,10 +205,9 @@ public class Cliente extends JFrame{
 			botonExecute = new JButton("Execute");
 			botonExecute.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String update = txtrSql.getText();
+					String update = txtrSql.getText()+"dbms_output.put_line(sql%rowcount)";
 					String res = modelo.GestorBD.getGestorBD().Update(update);
 					txtrNotificationArea.setText(res);
-/////////////Falta que cuente las lias afectadas y muestre el numero por area de notificaciones
 				}
 			});
 		}
