@@ -18,11 +18,6 @@ public class GestorBD extends Observable {
 	 * 
 	 */
 	private static GestorBD miGestorBD;
-	//private String user = "root";
-	//private String password = "maitane1234";
-	private Connection CanalBD;
-	// private Statement Instruccion;
-
 	private ResultSet resultado;
 	private Connection connection;
 	private Statement instruccion;
