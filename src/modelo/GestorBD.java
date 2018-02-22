@@ -18,8 +18,8 @@ public class GestorBD extends Observable {
 	 * 
 	 */
 	private static GestorBD miGestorBD;
-	private String user = "root";
-	private String password = "maitane1234";
+	//private String user = "root";
+	//private String password = "maitane1234";
 	private Connection CanalBD;
 	// private Statement Instruccion;
 
@@ -48,7 +48,7 @@ public class GestorBD extends Observable {
 	/*
 	 * Crear conexion con la base de datos
 	 */
-	public String OpenConnection(String serverAddress, String serverPort) {
+	public String OpenConnection(String serverAddress, String serverPort, String user, String password) {
 		String msg = "";
 		try {
 			connection = DriverManager.getConnection("jdbc:mysql://" + serverAddress + ":" + serverPort, user,

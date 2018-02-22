@@ -38,8 +38,25 @@ public class Cliente extends JFrame implements Observer{
 	private JButton botonExecute;
 	private JButton botonQuery;
 	private JTextArea txtrInformationArea;
-	private JTextArea txtrNotificationArea;
+	JTextArea txtrNotificationArea;
+	
+	private static Cliente mCliente;
 
+	String puerto = txtPort.getText();
+	String serverAddress = txtServerAddress.getText();
+	
+	public static Cliente getCliente(){
+		if (mCliente==null)
+			mCliente=new Cliente();
+		return mCliente;
+	}
+	
+	public String getPuerto(){
+		return puerto;
+	}
+	public String getServerAddress(){
+		return serverAddress;
+	}
 	/**
 	 * Launch the application.
 	 */
@@ -59,7 +76,7 @@ public class Cliente extends JFrame implements Observer{
 	/**
 	 * Create the frame.
 	 */
-	public Cliente() {
+	private Cliente() {
 		setTitle("Cliente");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 470, 477);
@@ -162,9 +179,11 @@ public class Cliente extends JFrame implements Observer{
 			btnLogin = new JButton("Login");
 			btnLogin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String puerto = txtPort.getText();
+					String serverAddress = txtServerAddress.getText();
 					Identificacion ident = new Identificacion();
 					ident.setVisible(true);
-					String res= modelo.GestorBD.getGestorBD().OpenConnection(txtServerAddress.getText(),txtPort.getText());
+					
 				}
 			});
 		}

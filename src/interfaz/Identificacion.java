@@ -104,7 +104,13 @@ public class Identificacion extends JFrame {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					
+					String puerto= Cliente.getCliente().puerto;
+					String serverAddress= Cliente.getCliente().serverAddress;
+					String usuario = textUsuario.getText();
+					String pass = passwordField.getToolTipText();
+					String res=modelo.GestorBD.getGestorBD().OpenConnection(serverAddress, puerto, usuario, pass);
+					Cliente.getCliente().txtrNotificationArea.setText(res);
+					dispose();
 				}
 			});
 		}
