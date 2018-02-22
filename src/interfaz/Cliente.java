@@ -24,7 +24,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class Cliente extends JFrame implements Observer{
+public class Cliente extends JFrame{
 
 	private JPanel contentPane;
 	private JPanel panel;
@@ -87,7 +87,6 @@ public class Cliente extends JFrame implements Observer{
 		contentPane.add(getPanel(), BorderLayout.NORTH);
 		contentPane.add(getPanel_1(), BorderLayout.SOUTH);
 		contentPane.add(getPanel_2(), BorderLayout.CENTER);
-		modelo.GestorBD.getGestorBD().addObserver(this);
 	}
 
 	private JPanel getPanel() {
@@ -248,27 +247,6 @@ public class Cliente extends JFrame implements Observer{
 			txtrNotificationArea.setText("Notification area");
 		}
 		return txtrNotificationArea;
-	}
-	
-	//muestra las notificaciones en la interfaz
-	private void mostrarNotificacion(String notificacion){
-		txtrNotificationArea.setText(notificacion);
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		if (arg.equals("update")) {
-			mostrarNotificacion("Base de Datos modificada.");
-		} 
-		if (arg.equals("select")) {
-			mostrarNotificacion("Visualizando la informacion requerida de la Base de Datos.");
-		} 
-		if (arg.equals("error_update")) {
-			mostrarNotificacion("Error al modificar la Base de Datos.");
-		} 
-		if (arg.equals("error_select")) {
-			mostrarNotificacion("Error al visualizar el contenido de la Base de Datos.");
-		}
 	}
 	
 }
