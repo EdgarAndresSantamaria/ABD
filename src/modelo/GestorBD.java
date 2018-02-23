@@ -5,11 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
-public class GestorBD extends Observable {
+public class GestorBD {
 
 	/**
 	 * atributos ConexiónBD debe contener la <ip de la máquina
@@ -22,6 +21,7 @@ public class GestorBD extends Observable {
 	private Connection connection;
 	private Statement instruccion;
 
+	
 	/**
 	 * constructora
 	 */
@@ -42,11 +42,10 @@ public class GestorBD extends Observable {
 	/*
 	 * Crear conexion con la base de datos
 	 */
-	public String OpenConnection(String serverAddress, String serverPort, String user, String password) {
+	public String OpenConnection(String serverAddress, String port, String user, String password) {
 		String msg = "";
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://" + serverAddress + ":" + serverPort, user,
-					password);
+			connection= DriverManager.getConnection("jdbc:mysql://"+serverAddress+":"+port, user, password);
 			connection.setAutoCommit(true);
 			instruccion = connection.createStatement();
 			msg = "Conexion establecida correctamente.";

@@ -24,39 +24,30 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class Cliente extends JFrame{
+public class Cliente extends JFrame {
 
 	private JPanel contentPane;
 	private JPanel panel;
 	private JPanel panel_1;
 	private JPanel panel_2;
 	private JTextArea txtrSql;
-	private JTextField txtServerAddress;
-	private JTextField txtPort;
+	private static JTextField txtServerAddress;
+	private static JTextField txtPort;
 	private JButton btnLogin;
 	private JButton btnLogout;
 	private JButton botonExecute;
 	private JButton botonQuery;
 	private JTextArea txtrInformationArea;
 	JTextArea txtrNotificationArea;
-	
+
 	private static Cliente mCliente;
 
-	String puerto = "";
-	String serverAddress = "";
-	
-	public static Cliente getCliente(){
-		if (mCliente==null)
-			mCliente=new Cliente();
+	public static Cliente getCliente() {
+		if (mCliente == null)
+			mCliente = new Cliente();
 		return mCliente;
 	}
-	
-	public String getPuerto(){
-		return puerto;
-	}
-	public String getServerAddress(){
-		return serverAddress;
-	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -99,57 +90,51 @@ public class Cliente extends JFrame{
 		}
 		return panel;
 	}
+
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();
 		}
 		return panel_1;
 	}
+
 	private JPanel getPanel_2() {
 		if (panel_2 == null) {
 			panel_2 = new JPanel();
 			GroupLayout gl_panel_2 = new GroupLayout(panel_2);
-			gl_panel_2.setHorizontalGroup(
-				gl_panel_2.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_2.createSequentialGroup()
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel_2.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(getTxtrSql(), GroupLayout.PREFERRED_SIZE, 319, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-									.addComponent(getBotonExecute())
-									.addComponent(getBotonQuery(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-							.addGroup(gl_panel_2.createSequentialGroup()
-								.addGap(74)
-								.addComponent(getTxtrNotificationArea(), GroupLayout.PREFERRED_SIZE, 288, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_panel_2.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(getTxtrInformationArea(), GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)))
-						.addGap(26))
-			);
-			gl_panel_2.setVerticalGroup(
-				gl_panel_2.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_2.createSequentialGroup()
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-							.addGroup(Alignment.LEADING, gl_panel_2.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(getTxtrSql(), GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
-							.addGroup(Alignment.LEADING, gl_panel_2.createSequentialGroup()
-								.addGap(29)
-								.addComponent(getBotonQuery())
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getBotonExecute())))
-						.addGap(18)
-						.addComponent(getTxtrInformationArea(), GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
-						.addGap(16)
-						.addComponent(getTxtrNotificationArea(), GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
-						.addContainerGap())
-			);
+			gl_panel_2.setHorizontalGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_2
+					.createSequentialGroup()
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_2
+							.createSequentialGroup().addContainerGap()
+							.addComponent(getTxtrSql(), GroupLayout.PREFERRED_SIZE, 319, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addComponent(getBotonExecute())
+									.addComponent(getBotonQuery(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+											Short.MAX_VALUE)))
+							.addGroup(gl_panel_2.createSequentialGroup().addGap(74).addComponent(
+									getTxtrNotificationArea(), GroupLayout.PREFERRED_SIZE, 288, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel_2.createSequentialGroup().addContainerGap().addComponent(
+									getTxtrInformationArea(), GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)))
+					.addGap(26)));
+			gl_panel_2.setVerticalGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_2
+					.createSequentialGroup()
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+							.addGroup(Alignment.LEADING,
+									gl_panel_2.createSequentialGroup().addContainerGap().addComponent(getTxtrSql(),
+											GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
+							.addGroup(Alignment.LEADING,
+									gl_panel_2.createSequentialGroup().addGap(29).addComponent(getBotonQuery())
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(getBotonExecute())))
+					.addGap(18)
+					.addComponent(getTxtrInformationArea(), GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
+					.addGap(16).addComponent(getTxtrNotificationArea(), GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+					.addContainerGap()));
 			panel_2.setLayout(gl_panel_2);
 		}
 		return panel_2;
 	}
+
 	private JTextArea getTxtrSql() {
 		if (txtrSql == null) {
 			txtrSql = new JTextArea();
@@ -157,15 +142,17 @@ public class Cliente extends JFrame{
 		}
 		return txtrSql;
 	}
-	private JTextField getTxtServerAddress() {
+
+	public static JTextField getTxtServerAddress() {
 		if (txtServerAddress == null) {
 			txtServerAddress = new JTextField();
-			txtServerAddress.setText("Server address");
+			txtServerAddress.setText("Server Address");
 			txtServerAddress.setColumns(10);
 		}
 		return txtServerAddress;
 	}
-	private JTextField getTxtPort() {
+
+	public static JTextField getTxtPort() {
 		if (txtPort == null) {
 			txtPort = new JTextField();
 			txtPort.setText("Port");
@@ -173,56 +160,76 @@ public class Cliente extends JFrame{
 		}
 		return txtPort;
 	}
+
 	private JButton getBtnLogin() {
 		if (btnLogin == null) {
 			btnLogin = new JButton("Login");
 			btnLogin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String puerto = txtPort.getText();
-					String serverAddress = txtServerAddress.getText();
+					// abrir la interfaz de logueo
 					Identificacion ident = new Identificacion();
 					ident.setVisible(true);
-					
+
 				}
 			});
 		}
 		return btnLogin;
 	}
+
 	private JButton getBtnLogout() {
 		if (btnLogout == null) {
 			btnLogout = new JButton("Logout");
 			btnLogout.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String res= modelo.GestorBD.getGestorBD().CloseConnection();
+					// Desconectar de la base de datos
+					String res = modelo.GestorBD.getGestorBD().CloseConnection();
 					txtrNotificationArea.setText(res);
 				}
 			});
 		}
 		return btnLogout;
 	}
+
 	private JButton getBotonExecute() {
 		if (botonExecute == null) {
 			botonExecute = new JButton("Execute");
 			botonExecute.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String update = txtrSql.getText()+"dbms_output.put_line(sql%rowcount)";
+					String update = txtrSql.getText() + "dbms_output.put_line(sql%rowcount)";
+					// ejecutar la SQL
 					String res = modelo.GestorBD.getGestorBD().Update(update);
+					// numero de tuplas afectadas
 					txtrNotificationArea.setText(res);
 				}
 			});
 		}
 		return botonExecute;
 	}
+
 	private JButton getBotonQuery() {
 		if (botonQuery == null) {
 			botonQuery = new JButton("Query");
 			botonQuery.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String query = txtrSql.getText();
-					ResultSet resultado = modelo.GestorBD.getGestorBD().Select(query);
 					try {
-///////Falta mostrar el contenido del resultado
-						txtrNotificationArea.setText("Numero de tuplas: "+resultado.getFetchSize());
+						// Ejecutar la query
+						ResultSet resultado = modelo.GestorBD.getGestorBD().Select(query);
+							//titulos atributos
+							for (int x = 1; x <= resultado.getMetaData().getColumnCount(); x++) {
+								txtrInformationArea.append(resultado.getMetaData().getColumnName(x));
+							}
+							//contenido de la select
+							while (resultado.next()) {
+								for (int x=1;x<=resultado.getMetaData().getColumnCount();x++){
+									// Esto para el salto de línea
+									txtrInformationArea.append(resultado.getString(x));
+									txtrInformationArea.append(System.getProperty("line.separator")); 
+								}
+
+							}						
+						// numero de tuplas listadas
+						txtrNotificationArea.setText("Numero de tuplas: " + resultado.getFetchSize());
 					} catch (SQLException error) {
 						// TODO Auto-generated catch block
 						error.printStackTrace();
@@ -232,7 +239,9 @@ public class Cliente extends JFrame{
 			});
 		}
 		return botonQuery;
+
 	}
+
 	private JTextArea getTxtrInformationArea() {
 		if (txtrInformationArea == null) {
 			txtrInformationArea = new JTextArea();
@@ -240,6 +249,7 @@ public class Cliente extends JFrame{
 		}
 		return txtrInformationArea;
 	}
+
 	private JTextArea getTxtrNotificationArea() {
 		if (txtrNotificationArea == null) {
 			txtrNotificationArea = new JTextArea();
@@ -247,6 +257,4 @@ public class Cliente extends JFrame{
 		}
 		return txtrNotificationArea;
 	}
-	
 }
-
