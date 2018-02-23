@@ -42,8 +42,8 @@ public class Cliente extends JFrame{
 	
 	private static Cliente mCliente;
 
-	String puerto = txtPort.getText();
-	String serverAddress = txtServerAddress.getText();
+	String puerto = "";
+	String serverAddress = "";
 	
 	public static Cliente getCliente(){
 		if (mCliente==null)
@@ -76,7 +76,7 @@ public class Cliente extends JFrame{
 	/**
 	 * Create the frame.
 	 */
-	private Cliente() {
+	public Cliente() {
 		setTitle("Cliente");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 470, 477);
