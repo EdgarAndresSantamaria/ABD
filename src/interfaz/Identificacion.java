@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controlador.fachada;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -28,11 +30,13 @@ public class Identificacion extends JFrame {
 	private JTextField textUsuario;
 	private JLabel lblPassword;
 	private JPasswordField passwordField;
+	private String puerto;
+	private String serverAddress;
 
 	/**
 	 * Create the frame.
 	 */
-	public Identificacion() {
+	public Identificacion(String pPuerto , String pServidor) {
 		setTitle("Identificaci\u00F3n");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 452, 124);
@@ -42,8 +46,14 @@ public class Identificacion extends JFrame {
 		setContentPane(contentPane);
 		contentPane.add(getPanel(), BorderLayout.SOUTH);
 		contentPane.add(getPanel_1(), BorderLayout.EAST);
+		puerto=pPuerto;
+		serverAddress=pServidor;
 	}
 
+	/**
+	 * inicializacion del panel 1
+	 * @return
+	 */
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
@@ -51,6 +61,11 @@ public class Identificacion extends JFrame {
 		}
 		return panel;
 	}
+	
+	/**
+	 * inicializacion del panel 2
+	 * @return
+	 */
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();
@@ -83,30 +98,43 @@ public class Identificacion extends JFrame {
 		}
 		return panel_1;
 	}
+	
+	/**
+	 * inicializacion del boton aceptar
+	 * @return
+	 */
 	private JButton getBtnAceptar() {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					String puerto= Cliente.getTxtPort().getText();
-					String serverAddress= Cliente.getTxtServerAddress().getText().toString();
 					String usuario = textUsuario.getText();
 					char[] arrayPass = passwordField.getPassword(); 
 					String pass = new String(arrayPass); 
-					String res=modelo.GestorBD.getGestorBD().OpenConnection(serverAddress, puerto, usuario, pass);
-					Cliente.getCliente().txtrNotificationArea.setText(res);
+					fachada.getInstancia().OpenConnection(serverAddress, puerto, usuario, pass);
+					Cliente.getCliente().setVisible(true);;
 					dispose();
 				}
 			});
 		}
 		return btnAceptar;
 	}
+	
+	/**
+	 * inicializacion de la etiqueta de usuario
+	 * @return
+	 */
 	private JLabel getLblUsuario() {
 		if (lblUsuario == null) {
 			lblUsuario = new JLabel("Usuario:");
 		}
 		return lblUsuario;
 	}
+	
+	/**
+	 * inicializacion del input de suario
+	 * @return
+	 */
 	private JTextField getTextUsuario() {
 		if (textUsuario == null) {
 			textUsuario = new JTextField();
@@ -114,16 +142,26 @@ public class Identificacion extends JFrame {
 		}
 		return textUsuario;
 	}
+	
+	/**
+	 * inicializacion de la etiqueta de contraseña
+	 * @return
+	 */
 	private JLabel getLblPassword() {
 		if (lblPassword == null) {
 			lblPassword = new JLabel("Password:");
 		}
 		return lblPassword;
 	}
+	
+	/**
+	 * inicializacion del input de contraseña
+	 * @return
+	 */
 	private JPasswordField getPasswordField() {
 		if (passwordField == null) {
 			passwordField = new JPasswordField();
-			passwordField.setToolTipText("Contrase�a");
+			passwordField.setToolTipText("Contrase�a");
 		}
 		return passwordField;
 	}

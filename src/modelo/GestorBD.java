@@ -1,5 +1,6 @@
 package modelo;
 
+import java.awt.EventQueue;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -8,11 +9,15 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
+import controlador.fachada;
+import interfaz.Cliente;
+
 public class GestorBD {
 
 	/**
 	 * atributos ConexiónBD debe contener la <ip de la máquina
-	 * virtual>:<puerto de escucha mysql>/<BD utilizada> user: no utilizar root
+	 * virtual>:<puerto de escucha mysql>/<BD utilizada> 
+	 * user: no utilizar root
 	 * y tener en cuenta que debe tener permisos sobre la BD a utilizar
 	 * 
 	 */
@@ -29,8 +34,9 @@ public class GestorBD {
 
 	}
 
-	/*
-	 * devolver GestorBD
+	/**
+	 * metodo para recuperar la instancia unica del GestorBD
+	 * @return
 	 */
 	public static GestorBD getGestorBD() {
 		if (miGestorBD == null) {
@@ -39,61 +45,45 @@ public class GestorBD {
 		return miGestorBD;
 	}
 
-	/*
-	 * Crear conexion con la base de datos
+	
+	/**
+	 * metodo para abrir una nueva conexion hacia la BD
+	 * @param serverAddress
+	 * @param port
+	 * @param user
+	 * @param password
 	 */
-	public String OpenConnection(String serverAddress, String port, String user, String password) {
-		String msg = "";
-		try {
-			connection= DriverManager.getConnection("jdbc:mysql://"+serverAddress+":"+port, user, password);
-			connection.setAutoCommit(true);
+	public void OpenConnection(String serverAddress, String port, String user, String password) throws SQLException {
+			connection= DriverManager.getConnection("jdbc:mysql://"+serverAddress+":"+port+"/AirbBD", user, password);
 			instruccion = connection.createStatement();
-			msg = "Conexion establecida correctamente.";
-		} catch (SQLException e) {
-			e.printStackTrace();
-			msg = e.getMessage();
-		}
-		return msg;
 	}
 
-	/*
-	 * Cerrar conexion con la base de datos
+	/**
+	 * metodo para cerrar la actual conexion hacia la BD
 	 */
-	public String CloseConnection() {
-		String msg = "";
-		try {
+	public void CloseConnection()  throws SQLException  {	
 			connection.close();
-			msg = "Conexion cerrada correctamente.";
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			msg = e.getMessage();
-		}
-		return msg;
 	}
 
-	/*
-	 * Sentencia update, insert y delete
+	/**
+	 * metodo update que ejecuta sentencias SQL del tipo update,insert,delete
+	 * @param SentenciaSQL
 	 */
-	public String Update(String SentenciaSQL) {
-		String msg ;
-		try {
-			int num = instruccion.executeUpdate(SentenciaSQL);
-			msg = Integer.toString(num);
-		}  catch (SQLException e) {
-			e.printStackTrace();
-			msg = e.getMessage();
-		}
-		return msg;
+	public void Update(String SentenciaSQL)  throws SQLException  {
+			instruccion.executeUpdate(SentenciaSQL);
 	}
 
-	/*
-	 * Sentencias select que lo devuelve en un resulset
+	/**
+	 * metodo update que ejecuta sentencias SQL del tipo Select
+	 * resultado devuelto en formato ResultSet SQL
+	 * @param SentenciaSQL
+	 * @return
+	 * @throws SQLException
 	 */
-	public ResultSet Select(String SentenciaSQL) {
+	public ResultSet Select(String SentenciaSQL) throws SQLException {
 		try {
 			resultado = instruccion.executeQuery(SentenciaSQL);
-		}  catch (SQLException e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		return resultado;

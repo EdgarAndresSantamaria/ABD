@@ -9,12 +9,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import org.json.simple.JSONArray;
+
+import controlador.fachada;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.JButton;
@@ -25,6 +30,9 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class Cliente extends JFrame {
+	/**
+	 * atributos de la ventana Principal de l aplicacion
+	 */
 
 	private JPanel contentPane;
 	private JPanel panel;
@@ -42,6 +50,10 @@ public class Cliente extends JFrame {
 
 	private static Cliente mCliente;
 
+	/**
+	 * m茅todo estatico para recuperar la 煤nica instancia de cliente
+	 * @return
+	 */
 	public static Cliente getCliente() {
 		if (mCliente == null)
 			mCliente = new Cliente();
@@ -80,6 +92,10 @@ public class Cliente extends JFrame {
 		contentPane.add(getPanel_2(), BorderLayout.CENTER);
 	}
 
+	/**
+	 * inicializacion del panel "identificacion"
+	 * @return
+	 */
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
@@ -91,6 +107,10 @@ public class Cliente extends JFrame {
 		return panel;
 	}
 
+	/**
+	 * inicializaci贸n del panel ""
+	 * @return
+	 */
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();
@@ -98,7 +118,12 @@ public class Cliente extends JFrame {
 		return panel_1;
 	}
 
+	/**
+	 * inicializaci贸n del panel ""
+	 * @return
+	 */
 	private JPanel getPanel_2() {
+
 		if (panel_2 == null) {
 			panel_2 = new JPanel();
 			GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -134,7 +159,11 @@ public class Cliente extends JFrame {
 		}
 		return panel_2;
 	}
-
+	
+	/**
+	 * inicializar el bloque para introducir sentencias SQL
+	 * @return
+	 */
 	private JTextArea getTxtrSql() {
 		if (txtrSql == null) {
 			txtrSql = new JTextArea();
@@ -142,8 +171,12 @@ public class Cliente extends JFrame {
 		}
 		return txtrSql;
 	}
-
-	public static JTextField getTxtServerAddress() {
+	
+	/**
+	 * creaci贸n del campo para recoger el nombre del servidor, por defecto localhost
+	 * @return
+	 */
+	public  JTextField getTxtServerAddress() {
 		if (txtServerAddress == null) {
 			txtServerAddress = new JTextField();
 			txtServerAddress.setText("Server Address");
@@ -151,8 +184,12 @@ public class Cliente extends JFrame {
 		}
 		return txtServerAddress;
 	}
-
-	public static JTextField getTxtPort() {
+	
+	/**
+	 * creaci贸n del campo para recoger el puerto del servidor , por defecto 3306
+	 * @return
+	 */
+	public  JTextField getTxtPort() {
 		if (txtPort == null) {
 			txtPort = new JTextField();
 			txtPort.setText("Port");
@@ -160,15 +197,21 @@ public class Cliente extends JFrame {
 		}
 		return txtPort;
 	}
-
+	
+	
+	/**
+	 * inicializaci贸n del boton login
+	 * @return
+	 */
 	private JButton getBtnLogin() {
 		if (btnLogin == null) {
 			btnLogin = new JButton("Login");
-			btnLogin.addActionListener(new ActionListener() {
+			btnLogin.addActionListener(new  ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					// abrir la interfaz de logueo
-					Identificacion ident = new Identificacion();
+					Identificacion ident = new Identificacion(txtPort.getText(),txtServerAddress.getText());
 					ident.setVisible(true);
+					dispose();
 
 				}
 			});
@@ -176,65 +219,60 @@ public class Cliente extends JFrame {
 		return btnLogin;
 	}
 
+	/**
+	 * inicializaci贸n del boton logout
+	 * @return
+	 */
 	private JButton getBtnLogout() {
 		if (btnLogout == null) {
 			btnLogout = new JButton("Logout");
 			btnLogout.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					// Desconectar de la base de datos
-					String res = modelo.GestorBD.getGestorBD().CloseConnection();
-					txtrNotificationArea.setText(res);
+					fachada.getInstancia().CloseConnection();
 				}
 			});
 		}
 		return btnLogout;
 	}
 
+	/**
+	 * inicializar boton de ejecuci贸n de las sentencias SQL (Update e Insert)
+	 * @return
+	 */
 	private JButton getBotonExecute() {
 		if (botonExecute == null) {
 			botonExecute = new JButton("Execute");
 			botonExecute.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String update = txtrSql.getText() + "dbms_output.put_line(sql%rowcount)";
-					// ejecutar la SQL
-					String res = modelo.GestorBD.getGestorBD().Update(update);
-					// numero de tuplas afectadas
-					txtrNotificationArea.setText(res);
+					String update = txtrSql.getText();
+					fachada.getInstancia().Update(update);
 				}
 			});
 		}
 		return botonExecute;
 	}
-
+	
+	/**
+	 * inicializa el boton para lanzar una Query (Select)
+	 * @return
+	 */
 	private JButton getBotonQuery() {
 		if (botonQuery == null) {
 			botonQuery = new JButton("Query");
 			botonQuery.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String query = txtrSql.getText();
-					try {
-						// Ejecutar la query
-						ResultSet resultado = modelo.GestorBD.getGestorBD().Select(query);
-							//titulos atributos
-							for (int x = 1; x <= resultado.getMetaData().getColumnCount(); x++) {
-								txtrInformationArea.append(resultado.getMetaData().getColumnName(x));
-							}
-							//contenido de la select
-							while (resultado.next()) {
-								for (int x=1;x<=resultado.getMetaData().getColumnCount();x++){
-									// Esto para el salto de l韓ea
-									txtrInformationArea.append(resultado.getString(x));
-									txtrInformationArea.append(System.getProperty("line.separator")); 
-								}
-
-							}						
-						// numero de tuplas listadas
-						txtrNotificationArea.setText("Numero de tuplas: " + resultado.getFetchSize());
-					} catch (SQLException error) {
-						// TODO Auto-generated catch block
-						error.printStackTrace();
-						txtrNotificationArea.setText(error.getMessage());
+					JSONArray resultado = fachada.getInstancia().Select(query);
+					Iterator<Object>it=resultado.iterator();
+					txtrInformationArea.append("\n");
+					while(it.hasNext()) {
+						Object tmp=it.next();
+						System.out.println(tmp.toString());
+						txtrInformationArea.append(tmp.toString()+"\n");	
 					}
+					setVisible(true);
+
 				}
 			});
 		}
@@ -242,6 +280,10 @@ public class Cliente extends JFrame {
 
 	}
 
+	/**
+	 * inicializa el area de informacion
+	 * @return
+	 */
 	private JTextArea getTxtrInformationArea() {
 		if (txtrInformationArea == null) {
 			txtrInformationArea = new JTextArea();
@@ -249,12 +291,28 @@ public class Cliente extends JFrame {
 		}
 		return txtrInformationArea;
 	}
+	
 
+	/**
+	 * inicializa el area de notificacion de errores
+	 * @return
+	 */
 	private JTextArea getTxtrNotificationArea() {
+
 		if (txtrNotificationArea == null) {
 			txtrNotificationArea = new JTextArea();
 			txtrNotificationArea.setText("Notification area");
 		}
 		return txtrNotificationArea;
+	}
+	
+	/**
+	 * metodo para mostrar errores en el area de notificacion de errores
+	 * @param error
+	 */
+	public void throwException(String error) {
+		//cargar error
+		txtrNotificationArea.setText(error);
+		setVisible(true);
 	}
 }
