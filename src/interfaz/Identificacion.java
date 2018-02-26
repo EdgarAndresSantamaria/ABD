@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controlador.fachada;
+import controlador.Fachada;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -111,7 +111,7 @@ public class Identificacion extends JFrame {
 					String usuario = textUsuario.getText();
 					char[] arrayPass = passwordField.getPassword(); 
 					String pass = new String(arrayPass); 
-					fachada.getInstancia().OpenConnection(serverAddress, puerto, usuario, pass);
+					Fachada.getInstancia().OpenConnection(serverAddress, puerto, usuario, pass);
 					Cliente.getCliente().setVisible(true);;
 					dispose();
 				}

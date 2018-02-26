@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
-import controlador.fachada;
+import controlador.Fachada;
 import interfaz.Cliente;
 
 public class GestorBD {
@@ -54,7 +54,7 @@ public class GestorBD {
 	 * @param password
 	 */
 	public void OpenConnection(String serverAddress, String port, String user, String password) throws SQLException {
-			connection= DriverManager.getConnection("jdbc:mysql://"+serverAddress+":"+port+"/AirbBD", user, password);
+			connection= DriverManager.getConnection("jdbc:mysql://"+serverAddress+":"+port+"/DBer", user, password);
 			instruccion = connection.createStatement();
 	}
 
@@ -81,11 +81,7 @@ public class GestorBD {
 	 * @throws SQLException
 	 */
 	public ResultSet Select(String SentenciaSQL) throws SQLException {
-		try {
-			resultado = instruccion.executeQuery(SentenciaSQL);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
+		resultado = instruccion.executeQuery(SentenciaSQL);
 		return resultado;
 	}
 }

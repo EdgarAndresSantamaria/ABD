@@ -19,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.json.simple.JSONArray;
 
-import controlador.fachada;
+import controlador.Fachada;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.JButton;
@@ -229,7 +229,7 @@ public class Cliente extends JFrame {
 			btnLogout.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					// Desconectar de la base de datos
-					fachada.getInstancia().CloseConnection();
+					Fachada.getInstancia().CloseConnection();
 				}
 			});
 		}
@@ -246,7 +246,7 @@ public class Cliente extends JFrame {
 			botonExecute.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String update = txtrSql.getText();
-					fachada.getInstancia().Update(update);
+					Fachada.getInstancia().Update(update);
 				}
 			});
 		}
@@ -263,7 +263,7 @@ public class Cliente extends JFrame {
 			botonQuery.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String query = txtrSql.getText();
-					JSONArray resultado = fachada.getInstancia().Select(query);
+					JSONArray resultado = Fachada.getInstancia().Select(query);
 					Iterator<Object>it=resultado.iterator();
 					txtrInformationArea.append("\n");
 					while(it.hasNext()) {

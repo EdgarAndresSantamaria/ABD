@@ -12,16 +12,16 @@ import com.mysql.jdbc.ResultSetMetaData;
 import interfaz.Cliente;
 import modelo.GestorBD;
 
-public class fachada {
-	private static fachada instancia;
+public class Fachada {
+	private static Fachada instancia;
 
-	private fachada() {
+	private Fachada() {
 
 	}
 
-	public static fachada getInstancia() {
+	public static Fachada getInstancia() {
 		if(instancia==null)	{
-			instancia=new fachada();
+			instancia=new Fachada();
 		}
 		return instancia;
 	}
@@ -33,10 +33,9 @@ public class fachada {
 		try {
 			GestorBD.getGestorBD().CloseConnection();
 		} catch (Exception e) {
-			throwException("error al cerrar conexion");
+			throwException(e.getMessage());
 		}
 	}
-
 	/**
 	 * metodo update que ejecuta sentencias SQL del tipo update,insert,delete
 	 * @param SentenciaSQL
@@ -46,7 +45,7 @@ public class fachada {
 		try {
 			GestorBD.getGestorBD().Update(SentenciaSQL);
 		} catch (Exception e) {
-			throwException("error al ejecutar execute");
+			throwException(e.getMessage());
 		}
 
 	}
@@ -60,8 +59,9 @@ public class fachada {
 	public void OpenConnection(String serverAddress, String port, String user, String password) {
 		try {
 			GestorBD.getGestorBD().OpenConnection(serverAddress, port, user, password);
+			throwException("conexion establecida");
 		} catch (Exception e) {
-			throwException("error al establecer la conexion");
+			throwException(e.getMessage());
 		}
 	}
 
@@ -132,7 +132,7 @@ public class fachada {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throwException("error al ejecutar query");		
+			throwException(e.getMessage());		
 		}
 
 		return json;
