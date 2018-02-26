@@ -80,6 +80,7 @@ public class Cliente extends JFrame {
 	 * Create the frame.
 	 */
 	public Cliente() {
+		setResizable(false);// Deshabilitar boton maximizar
 		setTitle("Cliente");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 470, 477);

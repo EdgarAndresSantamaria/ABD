@@ -37,6 +37,7 @@ public class Identificacion extends JFrame {
 	 * Create the frame.
 	 */
 	public Identificacion(String pPuerto , String pServidor) {
+		setResizable(false);// Deshabilitar boton maximizar
 		setTitle("Identificaci\u00F3n");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 452, 124);
