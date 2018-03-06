@@ -25,30 +25,7 @@ public class Fachada {
 		}
 		return instancia;
 	}
-
-	/**
-	 * metodo para cerrar la actual conexion hacia la BD
-	 */
-	public void CloseConnection() {
-		try {
-			GestorBD.getGestorBD().CloseConnection();
-		} catch (Exception e) {
-			throwException(e.getMessage());
-		}
-	}
-	/**
-	 * metodo update que ejecuta sentencias SQL del tipo update,insert,delete
-	 * @param SentenciaSQL
-	 */
-	public void Update(String SentenciaSQL) {
-
-		try {
-			GestorBD.getGestorBD().Update(SentenciaSQL);
-		} catch (Exception e) {
-			throwException(e.getMessage());
-		}
-
-	}
+	
 	/**
 	 * metodo para abrir una nueva conexion hacia la BD
 	 * @param serverAddress
@@ -64,6 +41,32 @@ public class Fachada {
 			throwException(e.getMessage());
 		}
 	}
+
+	/**
+	 * metodo para cerrar la actual conexion hacia la BD
+	 */
+	public void CloseConnection() {
+		try {
+			GestorBD.getGestorBD().CloseConnection();
+		} catch (Exception e) {
+			throwException(e.getMessage());
+		}
+	}
+	
+	/**
+	 * metodo update que ejecuta sentencias SQL del tipo update,insert,delete
+	 * @param SentenciaSQL
+	 */
+	public void Update(String SentenciaSQL) {
+
+		try {
+			GestorBD.getGestorBD().Update(SentenciaSQL);
+		} catch (Exception e) {
+			throwException(e.getMessage());
+		}
+
+	}
+	
 
 	/**
 	 * metodo update que ejecuta sentencias SQL del tipo Select
@@ -139,6 +142,16 @@ public class Fachada {
 	}
 
 
+	/**
+	 * metodo para introducir un alto número de registros en (alrededor de 10000 tuplas) 
+	 * en cada tabla (tableA y tableB / tableC y tableD).
+	 */
+	public void SlowQuery(){
+		/*Implemetar 1000 introducciones de registros para tableA o tableC*/
+		
+		/*Implemetar 1000 introducciones de registros para tableB o tableD*/
+	}
+	
 	/**
 	 * mÃ©todo de redireccion de errores hacia la interfaz
 	 * @param error

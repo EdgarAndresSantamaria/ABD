@@ -49,6 +49,7 @@ public class Cliente extends JFrame {
 	JTextArea txtrNotificationArea;
 
 	private static Cliente mCliente;
+	private JButton btnSlowquery;
 
 	/**
 	 * método estatico para recuperar la única instancia de cliente
@@ -128,34 +129,49 @@ public class Cliente extends JFrame {
 		if (panel_2 == null) {
 			panel_2 = new JPanel();
 			GroupLayout gl_panel_2 = new GroupLayout(panel_2);
-			gl_panel_2.setHorizontalGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_2
-					.createSequentialGroup()
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_2
-							.createSequentialGroup().addContainerGap()
-							.addComponent(getTxtrSql(), GroupLayout.PREFERRED_SIZE, 319, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addComponent(getBotonExecute())
-									.addComponent(getBotonQuery(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-											Short.MAX_VALUE)))
-							.addGroup(gl_panel_2.createSequentialGroup().addGap(74).addComponent(
-									getTxtrNotificationArea(), GroupLayout.PREFERRED_SIZE, 288, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_panel_2.createSequentialGroup().addContainerGap().addComponent(
-									getTxtrInformationArea(), GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)))
-					.addGap(26)));
-			gl_panel_2.setVerticalGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_2
-					.createSequentialGroup()
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-							.addGroup(Alignment.LEADING,
-									gl_panel_2.createSequentialGroup().addContainerGap().addComponent(getTxtrSql(),
-											GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
-							.addGroup(Alignment.LEADING,
-									gl_panel_2.createSequentialGroup().addGap(29).addComponent(getBotonQuery())
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(getBotonExecute())))
-					.addGap(18)
-					.addComponent(getTxtrInformationArea(), GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
-					.addGap(16).addComponent(getTxtrNotificationArea(), GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
-					.addContainerGap()));
+			gl_panel_2.setHorizontalGroup(
+				gl_panel_2.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_2.createSequentialGroup()
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(getTxtrSql(), GroupLayout.PREFERRED_SIZE, 319, GroupLayout.PREFERRED_SIZE)
+								.addGap(18)
+								.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+									.addComponent(getBtnSlowquery())
+									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+										.addComponent(getBotonExecute())
+										.addComponent(getBotonQuery(), GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))))
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addGap(74)
+								.addComponent(getTxtrNotificationArea(), GroupLayout.PREFERRED_SIZE, 288, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(getTxtrInformationArea(), GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)))
+						.addGap(18))
+			);
+			gl_panel_2.setVerticalGroup(
+				gl_panel_2.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_2.createSequentialGroup()
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(getTxtrSql(), GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addGap(29)
+								.addComponent(getBotonQuery())
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(getBotonExecute())))
+						.addGap(18)
+						.addComponent(getTxtrInformationArea(), GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
+						.addGap(16)
+						.addComponent(getTxtrNotificationArea(), GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+						.addContainerGap())
+					.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
+						.addContainerGap(89, Short.MAX_VALUE)
+						.addComponent(getBtnSlowquery())
+						.addGap(283))
+			);
 			panel_2.setLayout(gl_panel_2);
 		}
 		return panel_2;
@@ -315,5 +331,16 @@ public class Cliente extends JFrame {
 		//cargar error
 		txtrNotificationArea.setText(error);
 		setVisible(true);
+	}
+	private JButton getBtnSlowquery() {
+		if (btnSlowquery == null) {
+			btnSlowquery = new JButton("Slow_query");
+			btnSlowquery.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Fachada.getInstancia().SlowQuery();
+				}
+			});
+		}
+		return btnSlowquery;
 	}
 }
