@@ -3,6 +3,7 @@ package controlador;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.stream.IntStream;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -147,13 +148,35 @@ public class Fachada {
 	 * en cada tabla (tableA y tableB / tableC y tableD).
 	 */
 	public void SlowQuery(){
-		/*Implemetar 1000 introducciones de registros para tableA o tableC*/
-		
-		/*Implemetar 1000 introducciones de registros para tableB o tableD*/
+		//para cada n entre 0, 100 ......
+		if(!GestorBD.getGestorBD().getBD().equals("auditingCD")) {
+			SlowQuery("A",100);
+			SlowQuery("B",10000);
+		}else {
+			SlowQuery("C",100);
+			SlowQuery("D",10000);
+		}
 	}
 	
 	/**
-	 * método de redireccion de errores hacia la interfaz
+	 * metodo SlowQuery parametrizado
+	 * @param letra
+	 * @param upperBound
+	 */
+	private void SlowQuery(String letra,int upperBound) {
+		//para cada n entre 0, upperBound ......
+		  IntStream.range(0, upperBound).forEachOrdered(n -> {
+			    try {
+			    	//insertar una tupla (n,n) en la tabla 'tabla[letra]'
+					GestorBD.getGestorBD().Update("insert into table"+letra+" values("+n+","+n+");");
+				} catch (SQLException e) {
+					// lanzar excepcion
+					throwException(e.getMessage());		
+				}
+			});	
+	}
+	/**
+	 * metodo de redireccion de errores hacia la interfaz
 	 * @param error
 	 */
 	private void throwException(String error) {

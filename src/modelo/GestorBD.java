@@ -25,7 +25,11 @@ public class GestorBD {
 	private ResultSet resultado;
 	private Connection connection;
 	private Statement instruccion;
+	private String bd = "auditing";
 
+	public String getBD(){
+		return bd;
+	}
 	
 	/**
 	 * constructora
@@ -54,7 +58,7 @@ public class GestorBD {
 	 * @param password
 	 */
 	public void OpenConnection(String serverAddress, String port, String user, String password) throws SQLException {
-			connection= DriverManager.getConnection("jdbc:mysql://"+serverAddress+":"+port+"/DBer", user, password);
+			connection= DriverManager.getConnection("jdbc:mysql://"+serverAddress+":"+port+"/"+bd, user, password);
 			instruccion = connection.createStatement();
 	}
 
