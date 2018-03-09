@@ -25,7 +25,7 @@ public class GestorBD {
 	private ResultSet resultado;
 	private Connection connection;
 	private Statement instruccion;
-	private String bd = "auditing";
+	private String bd = "auditingAB";
 
 	public String getBD(){
 		return bd;

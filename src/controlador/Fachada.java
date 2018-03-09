@@ -3,6 +3,7 @@ package controlador;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 import org.json.simple.JSONArray;
@@ -144,7 +145,7 @@ public class Fachada {
 
 
 	/**
-	 * metodo para introducir un alto número de registros en (alrededor de 10000 tuplas) 
+	 * metodo para introducir un alto nï¿½mero de registros en (alrededor de 10000 tuplas) 
 	 * en cada tabla (tableA y tableB / tableC y tableD).
 	 */
 	public void SlowQuery(){
@@ -167,8 +168,10 @@ public class Fachada {
 		//para cada n entre 0, upperBound ......
 		  IntStream.range(0, upperBound).forEachOrdered(n -> {
 			    try {
+			    	int primerInt=ThreadLocalRandom.current().nextInt(1, upperBound);
+			    	int segundoInt=ThreadLocalRandom.current().nextInt(1, upperBound);
 			    	//insertar una tupla (n,n) en la tabla 'tabla[letra]'
-					GestorBD.getGestorBD().Update("insert into table"+letra+" values("+n+","+n+");");
+					GestorBD.getGestorBD().Update("insert into table"+letra+" values("+primerInt+","+segundoInt+");");
 				} catch (SQLException e) {
 					// lanzar excepcion
 					throwException(e.getMessage());		
