@@ -94,13 +94,30 @@ public class Data {
 		return barrier;
 	}
 
-	private int getValue(int nonlocking2, String x2) {
+	private int getValue(int nonlocking2, String x2) {//CAMBIAR MODO (SIN TERMINAR)
 		// recuperar valor contenido en variable 'x2'
-		return 0;
+		int result=0;
+		try {
+			sentence = "Select value from variable where name = "+x2;
+			resultado = st.executeQuery(sentence);
+			result = resultado.getInt(0);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
-	private Boolean setValue(int mode, String variable, int value) {
+	private Boolean setValue(int mode, String variable, int value) {//CAMBIAR MODO (SIN TERMINAR)
 		// update de la 'variable' con el nuevo 'value'
+		try {
+			String SentenciaSQL = "UPDATE `variables` SET `value`= "+value+" where name="+variable+";";
+			st.executeUpdate(SentenciaSQL);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 
 	}
