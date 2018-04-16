@@ -151,11 +151,11 @@ public class Fachada {
 	public void SlowQuery(){
 		//para cada n entre 0, 100 ......
 		if(!GestorBD.getGestorBD().getBD().equals("auditingCD")) {
-			SlowQuery("A",10000);
-			SlowQuery("B",10000);
+			SlowQuery("A",100000000);
+			SlowQuery("B",100000000);
 		}else {
-			SlowQuery("C",10000);
-			SlowQuery("D",10000);
+			SlowQuery("C",100000000);
+			SlowQuery("D",100000000);
 		}
 	}
 	
