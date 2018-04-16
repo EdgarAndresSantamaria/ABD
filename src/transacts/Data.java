@@ -115,12 +115,13 @@ public class Data {
 
 	public Boolean procedureA(String myName, int counter) {
 		//generar codigo procedimiento A
+		String name =myName;
 		int i = counter;
 		Integer xValue, tValue, aValue, yValue;
 		xValue = getValue(EXCLUSIVE_MODE, X);
 		xValue = xValue +1;
 		setValue(EXCLUSIVE_MODE, X , xValue);
-		System.out.println("WRITE( " + myName + Integer.toString(i+1) + "," + X + "," + Integer.toString(xValue-1) + "," + Integer.toString(xValue) + ")") ;
+		System.out.println("WRITE( " + name + Integer.toString(i+1) + "," + X + "," + Integer.toString(xValue-1) + "," + Integer.toString(xValue) + ")") ;
 		tValue =getValue(EXCLUSIVE_MODE, T);
 		aValue =getValue(EXCLUSIVE_MODE, A);
 		yValue =getValue(SHARE_MODE, Y);
@@ -128,9 +129,9 @@ public class Data {
 		aValue=aValue + yValue;
 		setValue(EXCLUSIVE_MODE, T, tValue);
 		setValue(EXCLUSIVE_MODE, A, aValue);
-		System.out.println("WRITE( " + myName + Integer.toString(i+1) + "," + T + "," + Integer.toString(tValue-yValue) + "," + Integer.toString(tValue) + ")") ;
-		System.out.println("WRITE( " + myName + Integer.toString(i+1) + "," + X + "," + Integer.toString(aValue-yValue) + "," + Integer.toString(aValue) + ")") ;
-		System.out.println("END_TRANSACTION" + myName + Integer.toString(i+1));
+		System.out.println("WRITE( " + name + Integer.toString(i+1) + "," + T + "," + Integer.toString(tValue-yValue) + "," + Integer.toString(tValue) + ")") ;
+		System.out.println("WRITE( " + name + Integer.toString(i+1) + "," + X + "," + Integer.toString(aValue-yValue) + "," + Integer.toString(aValue) + ")") ;
+		System.out.println("END_TRANSACTION" + name + Integer.toString(i+1));
 		return null;
 	}
 
