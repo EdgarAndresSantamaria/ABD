@@ -129,13 +129,21 @@ public class Data {
 	}
 
 	private void decreaseBarrier() {
-		// hacer una query que incremente M de la BD
-
+		// hacer una query que decremente M de la BD
+		Integer mValue;
+		mValue = getValue(EXCLUSIVE_MODE, M);
+		mValue = mValue - 1;
+		setValue(EXCLUSIVE_MODE, M, mValue);
+		System.out.println("WRITE( " + M + "," + Integer.toString(mValue + 1) + "," + Integer.toString(mValue) + ")");
 	}
 
 	private void increaseBarrier() {
 		// hacer una query que incremente M en la BD
-
+		Integer mValue;
+		mValue = getValue(EXCLUSIVE_MODE, M);
+		mValue = mValue + 1;
+		setValue(EXCLUSIVE_MODE, M, mValue);
+		System.out.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
 	}
 
 	public Boolean procedureA(String myName, int counter) {
