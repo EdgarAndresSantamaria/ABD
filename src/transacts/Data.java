@@ -2,15 +2,14 @@ package transacts;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Data {
 
-	Connection conn;
-	Statement st;
-	String sentence;
+	
 
 	static final int NONLOCKING = 0; //se trabaja sin reservas
 	static final int LOCKING = 1; //se trabaja utilizando reservas
@@ -35,6 +34,17 @@ public class Data {
 
 	int SHARE_MODE;
 	int EXCLUSIVE_MODE;
+	
+	//private config temporal BD Connection
+	private String serverAddress= null;
+	private String port= null;
+	private String bd = null;
+	private String user=null;
+	private String password=null;
+	private Connection conn;
+	private Statement st;
+	private String sentence;
+	private ResultSet resultado;
 
 	public Data(int myShareMode, int myExclusiveMode) {
 		SHARE_MODE = myShareMode;
@@ -50,7 +60,7 @@ public class Data {
 
 		// Open connection
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:8306", "concurrency_controller", "");
+			conn = DriverManager.getConnection("jdbc:mysql://"+serverAddress+":"+port+"/"+bd, user, password);
 			conn.setAutoCommit(true);
 			st = conn.createStatement();
 		} catch (SQLException e) {
@@ -65,8 +75,18 @@ public class Data {
 	}
 
 	private int getBarrierValue() {
+		int barrier = 0;
+		try {
+			sentence="Select value from variable where name = 'M'";
+			resultado = st.executeQuery(sentence);
+			barrier=resultado.getInt(0);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//hacer una query que devuelva M de la BD
-		return 0;
+		return barrier;
 	}
 
 	private int getValue(int nonlocking2, String x2) {
