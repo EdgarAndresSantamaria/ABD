@@ -122,6 +122,22 @@ public class Data {
 
 	public Boolean procedureA(String myName, int counter) {
 		//generar codigo procedimiento A
+		int i = counter;
+		Integer xValue, tValue, aValue, yValue;
+		xValue = getValue(EXCLUSIVE_MODE, X);
+		xValue = xValue +1;
+		setValue(EXCLUSIVE_MODE, X , xValue);
+		System.out.println("WRITE( " + myName + Integer.toString(i+1) + "," + X + "," + Integer.toString(xValue-1) + "," + Integer.toString(xValue) + ")") ;
+		tValue =getValue(EXCLUSIVE_MODE, T);
+		aValue =getValue(EXCLUSIVE_MODE, A);
+		yValue =getValue(SHARE_MODE, Y);
+		tValue = tValue + yValue;
+		aValue=aValue + yValue;
+		setValue(EXCLUSIVE_MODE, T, tValue);
+		setValue(EXCLUSIVE_MODE, A, aValue);
+		System.out.println("WRITE( " + myName + Integer.toString(i+1) + "," + T + "," + Integer.toString(tValue-yValue) + "," + Integer.toString(tValue) + ")") ;
+		System.out.println("WRITE( " + myName + Integer.toString(i+1) + "," + X + "," + Integer.toString(aValue-yValue) + "," + Integer.toString(aValue) + ")") ;
+		System.out.println("END_TRANSACTION" + myName + Integer.toString(i+1));
 		return null;
 	}
 
@@ -187,31 +203,25 @@ public class Data {
 			}
 		}
 		
-		try {
-			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,X)));
-			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,Y)));
-			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,Z)));
-			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,T)));
-			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,A)));
-			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,B)));
-			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,C)));
-			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,D)));
-			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,E)));
-			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,F)));
+		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,X)));
+		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,Y)));
+		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,Z)));
+		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,T)));
+		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,A)));
+		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,B)));
+		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,C)));
+		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,D)));
+		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,E)));
+		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING,F)));
 
-			System.out.println("Expected final value of " + X + ": " + Integer.toString(0));
-			System.out.println("Expected final value of " + Y + ": " + Integer.toString(0));
-			System.out.println("Expected final value of " + Z + ": " + Integer.toString(0));
-			System.out.println("Expected final value of " + T + ": " + Integer.toString(getValue(NONLOCKING,A)+
-					getValue(NONLOCKING,B)+getValue(NONLOCKING,C)+getValue(NONLOCKING,D)+getValue(NONLOCKING,E)+
-					getValue(NONLOCKING,F)));
-			
-			return true;
-
-		}catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
+		System.out.println("Expected final value of " + X + ": " + Integer.toString(0));
+		System.out.println("Expected final value of " + Y + ": " + Integer.toString(0));
+		System.out.println("Expected final value of " + Z + ": " + Integer.toString(0));
+		System.out.println("Expected final value of " + T + ": " + Integer.toString(getValue(NONLOCKING,A)+
+				getValue(NONLOCKING,B)+getValue(NONLOCKING,C)+getValue(NONLOCKING,D)+getValue(NONLOCKING,E)+
+				getValue(NONLOCKING,F)));
+		
+		return true;
 
 	}
 
