@@ -1,4 +1,4 @@
-package main;
+package transacts;
 
 public class ThreadB extends Thread {
 
