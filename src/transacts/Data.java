@@ -35,6 +35,13 @@ public class Data {
 
 	int SHARE_MODE;
 	int EXCLUSIVE_MODE;
+	
+	//private config temporal BD Connection
+	private String serverAddress= null;
+	private String port= null;
+	private String bd = null;
+	private String user=null;
+	private String password=null;
 
 	public Data(int myShareMode, int myExclusiveMode) {
 		SHARE_MODE = myShareMode;
@@ -50,7 +57,7 @@ public class Data {
 
 		// Open connection
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:8306", "concurrency_controller", "");
+			conn = DriverManager.getConnection("jdbc:mysql://"+serverAddress+":"+port+"/"+bd, user, password);
 			conn.setAutoCommit(true);
 			st = conn.createStatement();
 		} catch (SQLException e) {
