@@ -80,6 +80,7 @@ public class Data {
 	}
 
 	private int getBarrierValue() {
+		// hacer una query que devuelva M de la BD
 		int barrier = 0;
 		try {
 			sentence = "Select value from variable where name = 'M'";
@@ -90,7 +91,6 @@ public class Data {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// hacer una query que devuelva M de la BD
 		return barrier;
 	}
 
@@ -140,7 +140,7 @@ public class Data {
 	private void increaseBarrier() {
 		// hacer una query que incremente M en la BD
 		Integer mValue;
-		mValue = getValue(EXCLUSIVE_MODE, M);
+		mValue = getBarrierValue();
 		mValue = mValue + 1;
 		setValue(EXCLUSIVE_MODE, M, mValue);
 		System.out.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
