@@ -112,20 +112,22 @@ public class Data {
 		return result;
 	}
 
-	private Boolean setValue(int mode, String variable, int value) {//CAMBIAR MODO (SIN TERMINAR)
+	private Boolean setValue(int mode, String variable, int value) throws SQLException {//CAMBIAR MODO (SIN TERMINAR)
 		// update de la 'variable' con el nuevo 'value'
 		try {
 			String SentenciaSQL = "UPDATE `variables` SET `value`= "+value+" where name="+variable+";";
 			st.executeUpdate(SentenciaSQL);
+			conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			conn.rollback();
 		}
 		return null;
 
 	}
 
-	public void synchronyze() {
+	public void synchronyze() throws SQLException {
 		int barrierValue;
 
 		// incrementa la m en 1
@@ -143,12 +145,12 @@ public class Data {
 
 	}
 
-	public void finish() {
+	public void finish() throws SQLException {
 		// decrementa la m en 1
 		decreaseBarrier();
 	}
 
-	private void decreaseBarrier() {
+	private void decreaseBarrier() throws SQLException {
 		// hacer una query que decremente M de la BD
 		Integer mValue;
 		mValue = getValue(EXCLUSIVE_MODE, M);
@@ -157,7 +159,7 @@ public class Data {
 		System.out.println("WRITE( " + M + "," + Integer.toString(mValue + 1) + "," + Integer.toString(mValue) + ")");
 	}
 
-	private void increaseBarrier() {
+	private void increaseBarrier() throws SQLException {
 		// hacer una query que incremente M en la BD
 		Integer mValue;
 		mValue = getBarrierValue();
@@ -166,7 +168,7 @@ public class Data {
 		System.out.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
 	}
 
-	public Boolean procedureA(String myName, int counter) {
+	public Boolean procedureA(String myName, int counter) throws SQLException {
 		// generar codigo procedimiento A
 		String name = myName;
 		int i = counter;
@@ -191,7 +193,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureB(String myName, int counter) {
+	public Boolean procedureB(String myName, int counter) throws SQLException {
 		// generar codigo procedimiento B
 		String name = myName;
 		int i = counter;
@@ -216,7 +218,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureC(String myName, int counter) {
+	public Boolean procedureC(String myName, int counter) throws SQLException{
 		// generar codigo procedimiento C
 		String name = myName;
 		int i = counter;
@@ -241,7 +243,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureD(String myName, int counter) {
+	public Boolean procedureD(String myName, int counter) throws SQLException{
 		// generar codigo procedimiento D
 		String name = myName;
 		int i = counter;
@@ -266,7 +268,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureE(String myName, int counter) {
+	public Boolean procedureE(String myName, int counter) throws SQLException{
 		// generar codigo procedimiento E
 		String name = myName;
 		int i = counter;
@@ -291,7 +293,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureF(String myName, int counter) {
+	public Boolean procedureF(String myName, int counter) throws SQLException{
 		// generar codigo procedimiento F
 		String name = myName;
 		int i = counter;
