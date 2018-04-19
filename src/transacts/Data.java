@@ -97,8 +97,13 @@ public class Data {
 		// update de la 'variable' con el nuevo 'value'
 		boolean result;
 		try {
-			String SentenciaSQL = "UPDATE `variable` SET `value`= " + value + " where name=" + variable + ";";
-			st.executeUpdate(SentenciaSQL);
+			sentence = "UPDATE `variable` SET `value`= " + value + " where name= '"+ variable +"'";
+			if (mode == LOCKING) {
+				sentence += "for update;";
+			} else {
+				sentence += ";";
+			}
+			st.executeUpdate(sentence);
 			result = true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
