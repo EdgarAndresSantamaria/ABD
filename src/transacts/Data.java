@@ -143,7 +143,7 @@ public class Data {
 	public void initializeSharedVariables() {
 		// codigo que inicialice x,y,z,t,a,b,c,d,e,f,m a 0
 		try {
-			String SentenciaSQL = "UPDATE `concurrency_control.variables` SET `value`= 0;";
+			String SentenciaSQL = "UPDATE `variables` SET `value`= 0;";
 			st.executeUpdate(SentenciaSQL);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
