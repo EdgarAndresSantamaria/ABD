@@ -129,7 +129,7 @@ public class Data {
 		// hacer una query que devuelva M de la BD
 		int barrier = 0;
 		try {
-			sentence = "Select value from variable where name = 'M'";
+			sentence = "Select value from variables where name = 'M'";
 			resultado = st.executeQuery(sentence);
 			barrier = resultado.getInt(0);
 
