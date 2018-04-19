@@ -73,16 +73,15 @@ public class Data {
 		// recuperar valor contenido en variable 'x2'
 		int result = -1;
 		try {
-			sentence = "Select value from variable where name = '"+ x2 +"'";
+			sentence = "Select value from variable where name = '" + x2 + "'";
 			if (nonlocking2 == LOCKING) {
 				sentence += "for update;";
 			} else {
 				sentence += ";";
 			}
 			resultado = st.executeQuery(sentence);
-			resultado.next();
-			if(resultado!=null) {
-				result = resultado.getInt("value");
+			if (resultado.next()) {
+				result = resultado.getInt(1);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -176,7 +175,7 @@ public class Data {
 			xValue = xValue + 1;
 			setValue(EXCLUSIVE_MODE, X, xValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue - 1)
-			+ "," + Integer.toString(xValue) + ")");
+					+ "," + Integer.toString(xValue) + ")");
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			aValue = getValue(EXCLUSIVE_MODE, A);
 			yValue = getValue(SHARE_MODE, Y);
@@ -198,7 +197,7 @@ public class Data {
 			return false;
 		}
 	}
-	
+
 	public Boolean procedureB(String myName, int counter) throws SQLException {
 		try {
 			// generar codigo procedimiento B
@@ -209,7 +208,7 @@ public class Data {
 			yValue = yValue + 1;
 			setValue(EXCLUSIVE_MODE, Y, yValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Y + "," + Integer.toString(yValue - 1)
-			+ "," + Integer.toString(yValue) + ")");
+					+ "," + Integer.toString(yValue) + ")");
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			bValue = getValue(EXCLUSIVE_MODE, B);
 			zValue = getValue(SHARE_MODE, Z);
@@ -243,7 +242,7 @@ public class Data {
 			zValue = zValue + 1;
 			setValue(EXCLUSIVE_MODE, Z, zValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Z + "," + Integer.toString(zValue - 1)
-			+ "," + Integer.toString(zValue) + ")");
+					+ "," + Integer.toString(zValue) + ")");
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			cValue = getValue(EXCLUSIVE_MODE, C);
 			xValue = getValue(SHARE_MODE, X);
@@ -287,7 +286,7 @@ public class Data {
 			xValue = xValue - 1;
 			setValue(EXCLUSIVE_MODE, X, xValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue + 1)
-			+ "," + Integer.toString(xValue) + ")");
+					+ "," + Integer.toString(xValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
 
 			conn.commit();
@@ -322,7 +321,7 @@ public class Data {
 			yValue = yValue - 1;
 			setValue(EXCLUSIVE_MODE, Y, yValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Y + "," + Integer.toString(yValue + 1)
-			+ "," + Integer.toString(yValue) + ")");
+					+ "," + Integer.toString(yValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
 			conn.commit();
 			return true;
