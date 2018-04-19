@@ -68,14 +68,17 @@ public class Data {
 
 	}
 
-	private int getValue(int nonlocking2, String x2) {// CAMBIAR MODO (SIN TERMINAR)
+	private int getValue(int nonlocking2, String x2) {// CAMBIAR MODO (SIN
+														// TERMINAR)
 		// recuperar valor contenido en variable 'x2'
 		int result = 0;
 		try {
 			sentence = "Select value from variable where name = " + x2;
 			if (nonlocking2 == LOCKING) {
 				sentence += "for update;";
-			}else {sentence += ";";}
+			} else {
+				sentence += ";";
+			}
 			resultado = st.executeQuery(sentence);
 			result = resultado.getInt(0);
 		} catch (SQLException e) {
@@ -86,7 +89,9 @@ public class Data {
 		return result;
 	}
 
-	private Boolean setValue(int mode, String variable, int value) {// CAMBIAR MODO (SIN TERMINAR)
+	private Boolean setValue(int mode, String variable, int value) {// CAMBIAR
+																	// MODO (SIN
+																	// TERMINAR)
 		// update de la 'variable' con el nuevo 'value'
 		boolean result;
 		try {
@@ -96,7 +101,7 @@ public class Data {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			result=false;
+			result = false;
 		}
 		return result;
 
@@ -110,8 +115,8 @@ public class Data {
 		setValue(EXCLUSIVE_MODE, M, mValue);
 		System.out.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
 	}
-	
-	private void decreaseBarrier(){
+
+	private void decreaseBarrier() {
 		// hacer una query que decremente M de la BD
 		Integer mValue;
 		mValue = getValue(EXCLUSIVE_MODE, M);
@@ -134,7 +139,7 @@ public class Data {
 		}
 		return barrier;
 	}
-	
+
 	public void initializeSharedVariables() {
 		// codigo que inicialice x,y,z,t,a,b,c,d,e,f,m a 0
 		try {
@@ -244,78 +249,101 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureD(String myName, int counter) {
+	public Boolean procedureD(String myName, int counter) throws SQLException {
 		// generar codigo procedimiento D
-		String name = myName;
-		int i = counter;
-		Integer zValue, dValue, tValue, xValue;
-		tValue = getValue(EXCLUSIVE_MODE, T);
-		dValue = getValue(EXCLUSIVE_MODE, D);
-		zValue = getValue(SHARE_MODE, Z);
-		tValue = tValue + zValue;
-		dValue = dValue + zValue;
-		setValue(EXCLUSIVE_MODE, T, tValue);
-		setValue(EXCLUSIVE_MODE, D, dValue);
-		System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-				+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");
-		System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + D + ","
-				+ Integer.toString(dValue - zValue) + "," + Integer.toString(dValue) + ")");
-		xValue = getValue(EXCLUSIVE_MODE, X);
-		xValue = xValue - 1;
-		setValue(EXCLUSIVE_MODE, X, xValue);
-		System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue + 1)
-				+ "," + Integer.toString(xValue) + ")");
-		System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+		try {
+			String name = myName;
+			int i = counter;
+			Integer zValue, dValue, tValue, xValue;
+			tValue = getValue(EXCLUSIVE_MODE, T);
+			dValue = getValue(EXCLUSIVE_MODE, D);
+			zValue = getValue(SHARE_MODE, Z);
+			tValue = tValue + zValue;
+			dValue = dValue + zValue;
+			setValue(EXCLUSIVE_MODE, T, tValue);
+			setValue(EXCLUSIVE_MODE, D, dValue);
+			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");
+			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + D + ","
+					+ Integer.toString(dValue - zValue) + "," + Integer.toString(dValue) + ")");
+			xValue = getValue(EXCLUSIVE_MODE, X);
+			xValue = xValue - 1;
+			setValue(EXCLUSIVE_MODE, X, xValue);
+			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue + 1)
+					+ "," + Integer.toString(xValue) + ")");
+			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+
+			conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			conn.rollback();
+		}
 		return null;
 	}
 
-	public Boolean procedureE(String myName, int counter) {
+	public Boolean procedureE(String myName, int counter) throws SQLException {
 		// generar codigo procedimiento E
-		String name = myName;
-		int i = counter;
-		Integer tValue, eValue, xValue, yValue;
-		tValue = getValue(EXCLUSIVE_MODE, T);
-		eValue = getValue(EXCLUSIVE_MODE, E);
-		xValue = getValue(SHARE_MODE, X);
-		tValue = tValue + xValue;
-		eValue = eValue + xValue;
-		setValue(EXCLUSIVE_MODE, T, tValue);
-		setValue(EXCLUSIVE_MODE, E, eValue);
-		System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-				+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");
-		System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + E + ","
-				+ Integer.toString(eValue - xValue) + "," + Integer.toString(eValue) + ")");
-		yValue = getValue(EXCLUSIVE_MODE, Y);
-		yValue = yValue - 1;
-		setValue(EXCLUSIVE_MODE, Y, yValue);
-		System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Y + "," + Integer.toString(yValue + 1)
-				+ "," + Integer.toString(yValue) + ")");
-		System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+		try {
+			String name = myName;
+			int i = counter;
+			Integer tValue, eValue, xValue, yValue;
+			tValue = getValue(EXCLUSIVE_MODE, T);
+			eValue = getValue(EXCLUSIVE_MODE, E);
+			xValue = getValue(SHARE_MODE, X);
+			tValue = tValue + xValue;
+			eValue = eValue + xValue;
+			setValue(EXCLUSIVE_MODE, T, tValue);
+			setValue(EXCLUSIVE_MODE, E, eValue);
+			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+					+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");
+			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + E + ","
+					+ Integer.toString(eValue - xValue) + "," + Integer.toString(eValue) + ")");
+			yValue = getValue(EXCLUSIVE_MODE, Y);
+			yValue = yValue - 1;
+			setValue(EXCLUSIVE_MODE, Y, yValue);
+			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Y + "," + Integer.toString(yValue + 1)
+					+ "," + Integer.toString(yValue) + ")");
+			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+			conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			conn.rollback();
+		}
 		return null;
 	}
 
-	public Boolean procedureF(String myName, int counter) {
+	public Boolean procedureF(String myName, int counter) throws SQLException {
 		// generar codigo procedimiento F
-		String name = myName;
-		int i = counter;
-		Integer tValue, fValue, yValue, zValue;
-		tValue = getValue(EXCLUSIVE_MODE, T);
-		fValue = getValue(EXCLUSIVE_MODE, F);
-		yValue = getValue(SHARE_MODE, Y);
-		tValue = tValue + yValue;
-		fValue = fValue + yValue;
-		setValue(EXCLUSIVE_MODE, T, tValue);
-		setValue(EXCLUSIVE_MODE, F, fValue);
-		System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-				+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");
-		System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + E + ","
-				+ Integer.toString(fValue - yValue) + "," + Integer.toString(fValue) + ")");
-		zValue = getValue(EXCLUSIVE_MODE, Z);
-		zValue = zValue - 1;
-		setValue(EXCLUSIVE_MODE, Z, zValue);
-		System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Z + "," + Integer.toString(zValue + 1)
-				+ "," + Integer.toString(zValue) + ")");
-		System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+		try {
+			String name = myName;
+			int i = counter;
+			Integer tValue, fValue, yValue, zValue;
+			tValue = getValue(EXCLUSIVE_MODE, T);
+			fValue = getValue(EXCLUSIVE_MODE, F);
+			yValue = getValue(SHARE_MODE, Y);
+			tValue = tValue + yValue;
+			fValue = fValue + yValue;
+			setValue(EXCLUSIVE_MODE, T, tValue);
+			setValue(EXCLUSIVE_MODE, F, fValue);
+			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");
+			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + E + ","
+					+ Integer.toString(fValue - yValue) + "," + Integer.toString(fValue) + ")");
+			zValue = getValue(EXCLUSIVE_MODE, Z);
+			zValue = zValue - 1;
+			setValue(EXCLUSIVE_MODE, Z, zValue);
+			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Z + "," + Integer.toString(zValue + 1)
+					+ "," + Integer.toString(zValue) + ")");
+			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+
+			conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			conn.rollback();
+		}
 		return null;
 	}
 
