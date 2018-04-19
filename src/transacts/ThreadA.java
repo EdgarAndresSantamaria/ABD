@@ -1,5 +1,7 @@
 package transacts;
 
+import java.sql.SQLException;
+
 public class ThreadA extends Thread {
 
 	String myName = "A";
@@ -13,7 +15,7 @@ public class ThreadA extends Thread {
 	public void run() {
 
 		int counter = 0;
-		Boolean committed;
+		Boolean committed = false;
 
 		//Se sincroniza el inicio de la transaccion
 		myData.synchronyze();
@@ -22,7 +24,12 @@ public class ThreadA extends Thread {
 
 		//La transaccion se ejecuta 100 veces
 		while (counter < Data.NUMBER_OF_ITERATIONS) {
-			committed = myData.procedureA(myName, counter);
+			try {
+				committed = myData.procedureA(myName, counter);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (committed == true)
 				counter = counter + 1;
 		}

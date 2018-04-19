@@ -1,5 +1,7 @@
 package transacts;
 
+import java.sql.SQLException;
+
 public class ThreadF extends Thread {
 
 	String myName = "F";
@@ -13,14 +15,19 @@ public class ThreadF extends Thread {
 	public void run() {
 
 		int counter = 0;
-		Boolean committed;
+		Boolean committed=false;
 
 		myData.synchronyze();
 
 		System.out.println("Go " + myName + "!!!");
 
 		while (counter < Data.NUMBER_OF_ITERATIONS) {
-			committed = myData.procedureA(myName, counter);
+			try {
+				committed = myData.procedureA(myName, counter);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (committed == true)
 				counter = counter + 1;
 		}
