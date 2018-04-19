@@ -104,13 +104,12 @@ public class Data {
 			result = false;
 		}
 		return result;
-
 	}
 
 	private void increaseBarrier() {
 		// hacer una query que incremente M en la BD
 		Integer mValue;
-		mValue = getBarrierValue();
+		mValue = getValue(EXCLUSIVE_MODE, M);
 		mValue = mValue + 1;
 		setValue(EXCLUSIVE_MODE, M, mValue);
 		System.out.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
@@ -126,18 +125,8 @@ public class Data {
 	}
 
 	private int getBarrierValue() {
-		// hacer una query que devuelva M de la BD
-		int barrier = 0;
-		try {
-			sentence = "Select value from variable where name = 'M'";
-			resultado = st.executeQuery(sentence);
-			barrier = resultado.getInt(0);
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return barrier;
+		// hacer una query que devuelva M de la BD (lectura)
+		return getValue(SHARE_LOCKING, M);
 	}
 
 	public void initializeSharedVariables() {
