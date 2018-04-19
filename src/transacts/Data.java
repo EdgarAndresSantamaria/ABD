@@ -68,15 +68,56 @@ public class Data {
 
 	}
 
-	public void initializeSharedVariables() {
-		// codigo que inicialice x,y,z,t,a,b,c,d,e,f,m a 0
+	private int getValue(int nonlocking2, String x2) {// CAMBIAR MODO (SIN
+														// TERMINAR)
+		// recuperar valor contenido en variable 'x2'
+		int result = 0;
 		try {
-			String SentenciaSQL = "UPDATE `concurrency_control.variables` SET `value`= 0;";
-			st.executeUpdate(SentenciaSQL);
+			sentence = "Select value from variable where name = " + x2;
+			if (nonlocking2 == LOCKING) {
+				sentence += "for update;";
+			}
+			resultado = st.executeQuery(sentence);
+			result = resultado.getInt(0);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		return result;
+	}
+
+	private Boolean setValue(int mode, String variable, int value) throws SQLException {// CAMBIAR MODO (SIN TERMINAR)
+		// update de la 'variable' con el nuevo 'value'
+		try {
+			String SentenciaSQL = "UPDATE `variables` SET `value`= " + value + " where name=" + variable + ";";
+			st.executeUpdate(SentenciaSQL);
+			conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			conn.rollback();
+		}
+		return null;
+
+	}
+
+	private void increaseBarrier() throws SQLException {
+		// hacer una query que incremente M en la BD
+		Integer mValue;
+		mValue = getBarrierValue();
+		mValue = mValue + 1;
+		setValue(EXCLUSIVE_MODE, M, mValue);
+		System.out.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
+	}
+	
+	private void decreaseBarrier() throws SQLException {
+		// hacer una query que decremente M de la BD
+		Integer mValue;
+		mValue = getValue(EXCLUSIVE_MODE, M);
+		mValue = mValue - 1;
+		setValue(EXCLUSIVE_MODE, M, mValue);
+		System.out.println("WRITE( " + M + "," + Integer.toString(mValue + 1) + "," + Integer.toString(mValue) + ")");
 	}
 
 	private int getBarrierValue() {
@@ -93,38 +134,16 @@ public class Data {
 		}
 		return barrier;
 	}
-
-	private int getValue(int nonlocking2, String x2) {//CAMBIAR MODO (SIN TERMINAR)
-		// recuperar valor contenido en variable 'x2'
-		int result=0;
+	
+	public void initializeSharedVariables() {
+		// codigo que inicialice x,y,z,t,a,b,c,d,e,f,m a 0
 		try {
-			sentence = "Select value from variable where name = "+x2;
-			if(nonlocking2==LOCKING){
-				sentence += "for update;";
-			}
-			resultado = st.executeQuery(sentence);
-			result = resultado.getInt(0);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-
-	private Boolean setValue(int mode, String variable, int value) throws SQLException {//CAMBIAR MODO (SIN TERMINAR)
-		// update de la 'variable' con el nuevo 'value'
-		try {
-			String SentenciaSQL = "UPDATE `variables` SET `value`= "+value+" where name="+variable+";";
+			String SentenciaSQL = "UPDATE `concurrency_control.variables` SET `value`= 0;";
 			st.executeUpdate(SentenciaSQL);
-			conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			conn.rollback();
 		}
-		return null;
-
 	}
 
 	public void synchronyze() throws SQLException {
@@ -148,24 +167,6 @@ public class Data {
 	public void finish() throws SQLException {
 		// decrementa la m en 1
 		decreaseBarrier();
-	}
-
-	private void decreaseBarrier() throws SQLException {
-		// hacer una query que decremente M de la BD
-		Integer mValue;
-		mValue = getValue(EXCLUSIVE_MODE, M);
-		mValue = mValue - 1;
-		setValue(EXCLUSIVE_MODE, M, mValue);
-		System.out.println("WRITE( " + M + "," + Integer.toString(mValue + 1) + "," + Integer.toString(mValue) + ")");
-	}
-
-	private void increaseBarrier() throws SQLException {
-		// hacer una query que incremente M en la BD
-		Integer mValue;
-		mValue = getBarrierValue();
-		mValue = mValue + 1;
-		setValue(EXCLUSIVE_MODE, M, mValue);
-		System.out.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
 	}
 
 	public Boolean procedureA(String myName, int counter) throws SQLException {
@@ -218,7 +219,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureC(String myName, int counter) throws SQLException{
+	public Boolean procedureC(String myName, int counter) throws SQLException {
 		// generar codigo procedimiento C
 		String name = myName;
 		int i = counter;
@@ -243,7 +244,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureD(String myName, int counter) throws SQLException{
+	public Boolean procedureD(String myName, int counter) throws SQLException {
 		// generar codigo procedimiento D
 		String name = myName;
 		int i = counter;
@@ -268,7 +269,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureE(String myName, int counter) throws SQLException{
+	public Boolean procedureE(String myName, int counter) throws SQLException {
 		// generar codigo procedimiento E
 		String name = myName;
 		int i = counter;
@@ -293,7 +294,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureF(String myName, int counter) throws SQLException{
+	public Boolean procedureF(String myName, int counter) throws SQLException {
 		// generar codigo procedimiento F
 		String name = myName;
 		int i = counter;
