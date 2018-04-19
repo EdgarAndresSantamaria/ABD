@@ -95,7 +95,7 @@ public class Data {
 		// update de la 'variable' con el nuevo 'value'
 		boolean result;
 		try {
-			String SentenciaSQL = "UPDATE `variables` SET `value`= " + value + " where name=" + variable + ";";
+			String SentenciaSQL = "UPDATE `variable` SET `value`= " + value + " where name=" + variable + ";";
 			st.executeUpdate(SentenciaSQL);
 			result = true;
 		} catch (SQLException e) {
@@ -129,7 +129,7 @@ public class Data {
 		// hacer una query que devuelva M de la BD
 		int barrier = 0;
 		try {
-			sentence = "Select value from variables where name = 'M'";
+			sentence = "Select value from variable where name = 'M'";
 			resultado = st.executeQuery(sentence);
 			barrier = resultado.getInt(0);
 
@@ -143,7 +143,7 @@ public class Data {
 	public void initializeSharedVariables() {
 		// codigo que inicialice x,y,z,t,a,b,c,d,e,f,m a 0
 		try {
-			String SentenciaSQL = "UPDATE `variables` SET `value`= 0;";
+			String SentenciaSQL = "UPDATE `variable` SET `value`= 0;";
 			st.executeUpdate(SentenciaSQL);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
