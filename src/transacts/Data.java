@@ -126,7 +126,7 @@ public class Data {
 
 	private int getBarrierValue() {
 		// hacer una query que devuelva M de la BD (lectura)
-		return getValue(SHARE_LOCKING, M);
+		return getValue(SHARE_MODE, M);
 	}
 
 	public void initializeSharedVariables() {
