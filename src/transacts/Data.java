@@ -71,16 +71,18 @@ public class Data {
 	private int getValue(int nonlocking2, String x2) {// CAMBIAR MODO (SIN
 														// TERMINAR)
 		// recuperar valor contenido en variable 'x2'
-		int result = 0;
+		int result = -1;
 		try {
-			sentence = "Select value from variable where name = ' "+ x2 +"'";
+			sentence = "Select value from variable where name = '"+ x2 +"'";
 			if (nonlocking2 == LOCKING) {
 				sentence += "for update;";
 			} else {
 				sentence += ";";
 			}
 			resultado = st.executeQuery(sentence);
-			result = resultado.getInt(0);
+			if(resultado!=null) {
+				result = resultado.getInt("value");
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -125,8 +127,7 @@ public class Data {
 	}
 
 	private int getBarrierValue() {
-		// hacer una query que devuelva M de la BD (lectura)
-		return getValue(SHARE_LOCKING, M);
+		return getValue(SHARE_MODE, M);
 	}
 
 	public void initializeSharedVariables() {
