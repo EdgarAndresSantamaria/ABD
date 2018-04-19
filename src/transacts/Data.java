@@ -35,11 +35,11 @@ public class Data {
 	int EXCLUSIVE_MODE;
 
 	// private config temporal BD Connection
-	private String serverAddress = null;
-	private String port = null;
-	private String bd = null;
-	private String user = null;
-	private String password = null;
+	private String serverAddress = "192.168.56.102";
+	private String port = "3306";
+	private String bd = "concurrency_control";
+	private String user = "concurrency_control";
+	private String password = "hola";
 	private Connection conn;
 	private Statement st;
 	private String sentence;
@@ -73,7 +73,7 @@ public class Data {
 		// recuperar valor contenido en variable 'x2'
 		int result = 0;
 		try {
-			sentence = "Select value from variable where name = " + x2;
+			sentence = "Select value from variable where name = ' "+ x2 +"'";
 			if (nonlocking2 == LOCKING) {
 				sentence += "for update;";
 			} else {
@@ -295,16 +295,18 @@ public class Data {
 			xValue = xValue - 1;
 			setValue(EXCLUSIVE_MODE, X, xValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue + 1)
-					+ "," + Integer.toString(xValue) + ")");
+			+ "," + Integer.toString(xValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
 
 			conn.commit();
+			return true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			conn.rollback();
+			return false;
 		}
-		return null;
+
 	}
 
 	public Boolean procedureE(String myName, int counter) throws SQLException {
