@@ -68,15 +68,14 @@ public class Data {
 
 	}
 
-	private int getValue(int nonlocking2, String x2) {// CAMBIAR MODO (SIN
-														// TERMINAR)
+	private int getValue(int nonlocking2, String x2) {// CAMBIAR MODO (SIN TERMINAR)
 		// recuperar valor contenido en variable 'x2'
 		int result = 0;
 		try {
 			sentence = "Select value from variable where name = " + x2;
 			if (nonlocking2 == LOCKING) {
 				sentence += "for update;";
-			}
+			}else {sentence += ";";}
 			resultado = st.executeQuery(sentence);
 			result = resultado.getInt(0);
 		} catch (SQLException e) {
@@ -87,22 +86,23 @@ public class Data {
 		return result;
 	}
 
-	private Boolean setValue(int mode, String variable, int value) throws SQLException {// CAMBIAR MODO (SIN TERMINAR)
+	private Boolean setValue(int mode, String variable, int value) {// CAMBIAR MODO (SIN TERMINAR)
 		// update de la 'variable' con el nuevo 'value'
+		boolean result;
 		try {
 			String SentenciaSQL = "UPDATE `variables` SET `value`= " + value + " where name=" + variable + ";";
 			st.executeUpdate(SentenciaSQL);
-			conn.commit();
+			result = true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			conn.rollback();
+			result=false;
 		}
-		return null;
+		return result;
 
 	}
 
-	private void increaseBarrier() throws SQLException {
+	private void increaseBarrier() {
 		// hacer una query que incremente M en la BD
 		Integer mValue;
 		mValue = getBarrierValue();
@@ -111,7 +111,7 @@ public class Data {
 		System.out.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
 	}
 	
-	private void decreaseBarrier() throws SQLException {
+	private void decreaseBarrier(){
 		// hacer una query que decremente M de la BD
 		Integer mValue;
 		mValue = getValue(EXCLUSIVE_MODE, M);
@@ -146,7 +146,7 @@ public class Data {
 		}
 	}
 
-	public void synchronyze() throws SQLException {
+	public void synchronyze() {
 		int barrierValue;
 
 		// incrementa la m en 1
@@ -164,12 +164,12 @@ public class Data {
 
 	}
 
-	public void finish() throws SQLException {
+	public void finish() {
 		// decrementa la m en 1
 		decreaseBarrier();
 	}
 
-	public Boolean procedureA(String myName, int counter) throws SQLException {
+	public Boolean procedureA(String myName, int counter) {
 		// generar codigo procedimiento A
 		String name = myName;
 		int i = counter;
@@ -194,7 +194,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureB(String myName, int counter) throws SQLException {
+	public Boolean procedureB(String myName, int counter) {
 		// generar codigo procedimiento B
 		String name = myName;
 		int i = counter;
@@ -219,7 +219,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureC(String myName, int counter) throws SQLException {
+	public Boolean procedureC(String myName, int counter) {
 		// generar codigo procedimiento C
 		String name = myName;
 		int i = counter;
@@ -244,7 +244,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureD(String myName, int counter) throws SQLException {
+	public Boolean procedureD(String myName, int counter) {
 		// generar codigo procedimiento D
 		String name = myName;
 		int i = counter;
@@ -269,7 +269,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureE(String myName, int counter) throws SQLException {
+	public Boolean procedureE(String myName, int counter) {
 		// generar codigo procedimiento E
 		String name = myName;
 		int i = counter;
@@ -294,7 +294,7 @@ public class Data {
 		return null;
 	}
 
-	public Boolean procedureF(String myName, int counter) throws SQLException {
+	public Boolean procedureF(String myName, int counter) {
 		// generar codigo procedimiento F
 		String name = myName;
 		int i = counter;
