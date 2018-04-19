@@ -99,6 +99,9 @@ public class Data {
 		int result=0;
 		try {
 			sentence = "Select value from variable where name = "+x2;
+			if(nonlocking2==LOCKING){
+				sentence += "for update;";
+			}
 			resultado = st.executeQuery(sentence);
 			result = resultado.getInt(0);
 		} catch (SQLException e) {
