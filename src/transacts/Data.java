@@ -80,6 +80,7 @@ public class Data {
 				sentence += ";";
 			}
 			resultado = st.executeQuery(sentence);
+			resultado.next();
 			if(resultado!=null) {
 				result = resultado.getInt("value");
 			}
@@ -127,12 +128,8 @@ public class Data {
 	}
 
 	private int getBarrierValue() {
-<<<<<<< HEAD
-		// hacer una query que devuelva M de la BD (lectura)
+
 		return getValue(SHARE_MODE, M);
-=======
-		return getValue(SHARE_MODE, M);
->>>>>>> 42bbd1f827a415d7f359f454f74d243b98fd4820
 	}
 
 	public void initializeSharedVariables() {
