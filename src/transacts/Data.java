@@ -98,7 +98,7 @@ public class Data {
 																	// TERMINAR)
 		// update de la 'variable' con el nuevo 'value'
 		try {
-			sentence = "UPDATE variable SET value= " + value + " where name= '"+ variable +"' ;";
+			sentence = "UPDATE variable SET value= " + value + " where name= '"+ variable +"' ";
 			if (mode == SHARE_LOCKING) {//si reserva exclusiva..
 				sentence += "for update;";
 			} else if(mode == EXCLUSIVE_LOCKING) {//si reserva compartida..
