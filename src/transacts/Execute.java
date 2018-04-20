@@ -9,8 +9,8 @@ public class Execute {
 		Data mainData = new Data(Data.NONLOCKING, Data.NONLOCKING);
 
 		ThreadA threadA = new ThreadA(MODE);
-		//ThreadB threadB = new ThreadB(MODE);
-		//ThreadC threadC = new ThreadC(MODE);
+		ThreadB threadB = new ThreadB(MODE);
+		ThreadC threadC = new ThreadC(MODE);
 		//ThreadD threadD = new ThreadD(MODE);
 		//ThreadE threadE = new ThreadE(MODE);
 		//ThreadF threadF = new ThreadF(MODE);
@@ -21,8 +21,8 @@ public class Execute {
 		mainData.showInitialValues();
 
 		new Thread(threadA).start();
-		//new Thread(threadB).start();
-		//new Thread(threadC).start();
+		new Thread(threadB).start();
+		new Thread(threadC).start();
 		//new Thread(threadD).start();
 		//new Thread(threadE).start();
 		//new Thread(threadF).start();

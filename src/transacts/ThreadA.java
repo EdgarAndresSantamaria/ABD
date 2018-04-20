@@ -22,7 +22,7 @@ public class ThreadA extends Thread {
 		Boolean committed = false;
 
 		//Se sincroniza el inicio de la transaccion
-		//myData.synchronyze();
+		myData.synchronyze();
 
 		System.out.println("Go " + myName + "!!!");
 

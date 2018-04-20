@@ -17,7 +17,7 @@ public class Data {
 
 	static final int NUMBER_OF_ITERATIONS = 100; // num de iteraciones por cada
 													// transaccion
-	static final int NUMBER_OF_THREADS = 1; // numero de hilos maximo
+	static final int NUMBER_OF_THREADS = 3; // numero de hilos maximo
 
 	static final String X = "X";
 	static final String Y = "Y";
@@ -75,10 +75,13 @@ public class Data {
 		try {
 			sentence = "Select value from variable where name = '" + x2 + "' ";
 			if (nonlocking2 == SHARE_LOCKING) {//si reserva exclusiva..
+				System.out.println("reservada en exclusiva... "+x2);
 				sentence += "for update;";
 			} else if(nonlocking2 == EXCLUSIVE_LOCKING) {//si reserva compartida..
+				System.out.println("reservada en compartido... "+x2);
 				sentence += "lock in share mode;";
 			}else {//sin reservas...
+				System.out.println("recuperada sin reservas... "+x2);
 				sentence += ";";
 			}
 			resultado = st.executeQuery(sentence);
