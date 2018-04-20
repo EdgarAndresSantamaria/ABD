@@ -35,10 +35,10 @@ public class Data {
 	int EXCLUSIVE_MODE;
 
 	// private config temporal BD Connection
-	private String serverAddress = "192.168.56.102";
+	private String serverAddress = "192.168.56.10";
 	private String port = "3306";
 	private String bd = "concurrency_control";
-	private String user = "concurrency_control";
+	private String user = "concurrency_contro";
 	private String password = "hola";
 	private Connection conn;
 	private Statement st;
@@ -99,13 +99,13 @@ public class Data {
 		// update de la 'variable' con el nuevo 'value'
 		try {
 			sentence = "UPDATE variable SET value= " + value + " where name= '"+ variable +"' ;";
-			/**if (mode == SHARE_LOCKING) {//si reserva exclusiva..
+			if (mode == SHARE_LOCKING) {//si reserva exclusiva..
 				sentence += "for update;";
 			} else if(mode == EXCLUSIVE_LOCKING) {//si reserva compartida..
 				sentence += "lock in share mode;";
 			}else {//sin reservas...
 				sentence += ";";
-			}**/
+			}
 			st.executeUpdate(sentence);
 			//String SentenciaSQL = "UPDATE variable SET value= " + value + " where name= '" + variable + "';";
 		} catch (SQLException e) {
@@ -176,7 +176,10 @@ public class Data {
 			int i = counter;
 			Integer xValue, tValue, aValue, yValue;
 			xValue = getValue(EXCLUSIVE_MODE, X);
+			System.out.println("Antes:"+xValue);
 			xValue = xValue + 1;
+
+			System.out.println("Despues:"+xValue);
 			setValue(EXCLUSIVE_MODE, X, xValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue - 1)
 					+ "," + Integer.toString(xValue) + ")");

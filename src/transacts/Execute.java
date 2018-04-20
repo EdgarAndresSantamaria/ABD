@@ -2,8 +2,8 @@ package transacts;
 
 public class Execute {
 
-	static final int MODE = Data.LOCKING;
-	// static final int MODE = Data.NONLOCKING;
+	//static final int MODE = Data.LOCKING;
+	 static final int MODE = Data.NONLOCKING;
 
 	public static void main(String[] args) {
 		Data mainData = new Data(Data.NONLOCKING, Data.NONLOCKING);
