@@ -1,3 +1,4 @@
+package pruebacliente;
 
 public class MyThreadA extends Thread {
 

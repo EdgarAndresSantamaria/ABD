@@ -1,3 +1,4 @@
+package pruebacliente;
 import java.sql.*;
 
 public class Data {
