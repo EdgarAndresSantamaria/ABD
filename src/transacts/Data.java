@@ -17,7 +17,7 @@ public class Data {
 
 	static final int NUMBER_OF_ITERATIONS = 100; // num de iteraciones por cada
 													// transaccion
-	static final int NUMBER_OF_THREADS = 6; // numero de hilos maximo
+	static final int NUMBER_OF_THREADS = 1; // numero de hilos maximo
 
 	static final String X = "X";
 	static final String Y = "Y";
@@ -60,7 +60,7 @@ public class Data {
 		// Open connection
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://" + serverAddress + ":" + port + "/" + bd, user, password);
-			conn.setAutoCommit(true);
+			conn.setAutoCommit(false);
 			st = conn.createStatement();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -73,10 +73,12 @@ public class Data {
 		// recuperar valor contenido en variable 'x2'
 		int result = -1;
 		try {
-			sentence = "Select value from variable where name = '" + x2 + "'";
-			if (nonlocking2 == LOCKING) {
+			sentence = "Select value from variable where name = '" + x2 + "' ";
+			if (nonlocking2 == SHARE_LOCKING) {//si reserva exclusiva..
 				sentence += "for update;";
-			} else {
+			} else if(nonlocking2 == EXCLUSIVE_LOCKING) {//si reserva compartida..
+				sentence += "lock in share mode;";
+			}else {//sin reservas...
 				sentence += ";";
 			}
 			resultado = st.executeQuery(sentence);
@@ -91,33 +93,32 @@ public class Data {
 		return result;
 	}
 
-	private Boolean setValue(int mode, String variable, int value) {// CAMBIAR
+	private void setValue(int mode, String variable, int value) {// CAMBIAR
 																	// MODO (SIN
 																	// TERMINAR)
 		// update de la 'variable' con el nuevo 'value'
-		boolean result;
 		try {
-			sentence = "UPDATE `variable` SET `value`= " + value + " where name= '"+ variable +"'";
-			if (mode == LOCKING) {
+			sentence = "UPDATE variable SET value= " + value + " where name= '"+ variable +"' ;";
+			/**if (mode == SHARE_LOCKING) {//si reserva exclusiva..
 				sentence += "for update;";
-			} else {
+			} else if(mode == EXCLUSIVE_LOCKING) {//si reserva compartida..
+				sentence += "lock in share mode;";
+			}else {//sin reservas...
 				sentence += ";";
-			}
+			}**/
 			st.executeUpdate(sentence);
-			result = true;
+			//String SentenciaSQL = "UPDATE variable SET value= " + value + " where name= '" + variable + "';";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			result = false;
 		}
-		return result;
 	}
 
 	private void increaseBarrier() {
 		// hacer una query que incremente M en la BD
-		Integer mValue;
-		mValue = getValue(EXCLUSIVE_MODE, M);
-		mValue = mValue + 1;
+		Integer mValue = getValue(EXCLUSIVE_MODE, M);
+		System.out.println(mValue);
+		mValue ++;
 		setValue(EXCLUSIVE_MODE, M, mValue);
 		System.out.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
 	}
@@ -126,16 +127,15 @@ public class Data {
 		// hacer una query que decremente M de la BD
 		Integer mValue;
 		mValue = getValue(EXCLUSIVE_MODE, M);
-		mValue = mValue - 1;
+		mValue --;
 		setValue(EXCLUSIVE_MODE, M, mValue);
 		System.out.println("WRITE( " + M + "," + Integer.toString(mValue + 1) + "," + Integer.toString(mValue) + ")");
 	}
 
 	private int getBarrierValue() {
-
 		return getValue(SHARE_MODE, M);
 	}
-
+		
 	public void initializeSharedVariables() {
 		// codigo que inicialice x,y,z,t,a,b,c,d,e,f,m a 0
 		try {
@@ -152,7 +152,6 @@ public class Data {
 
 		// incrementa la m en 1
 		increaseBarrier();
-
 		barrierValue = getBarrierValue();
 		while (barrierValue < Data.NUMBER_OF_THREADS) {
 			try {
@@ -190,7 +189,7 @@ public class Data {
 			setValue(EXCLUSIVE_MODE, A, aValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + ","
+			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + A + ","
 					+ Integer.toString(aValue - yValue) + "," + Integer.toString(aValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
 			conn.commit();

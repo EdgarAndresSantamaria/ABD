@@ -8,7 +8,12 @@ public class ThreadF extends Thread {
 	Data myData;
 
 	public ThreadF(int mode) {
-		// TODO Auto-generated constructor stub
+
+		if(mode==Data.LOCKING) {
+			myData=new Data(Data.SHARE_LOCKING,Data.EXCLUSIVE_LOCKING);
+		}else {
+			myData=new Data(0,0);
+		}
 	}
 
 	@Override

@@ -7,8 +7,12 @@ public class ThreadA extends Thread {
 	String myName = "A";
 	Data myData;
 
-	public ThreadA(int mode) {
-		// TODO Auto-generated constructor stub
+	public ThreadA(int mode) {	
+		if(mode==Data.LOCKING) {
+			myData=new Data(Data.SHARE_LOCKING,Data.EXCLUSIVE_LOCKING);
+		}else {
+			myData=new Data(0,0);
+		}
 	}
 
 	@Override
@@ -18,7 +22,7 @@ public class ThreadA extends Thread {
 		Boolean committed = false;
 
 		//Se sincroniza el inicio de la transaccion
-		myData.synchronyze();
+		//myData.synchronyze();
 
 		System.out.println("Go " + myName + "!!!");
 
