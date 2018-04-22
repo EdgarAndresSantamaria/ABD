@@ -68,8 +68,8 @@ public class Data {
 
 	}
 
+	// obtener valor de 'variable' de la BD
 	private int getValue(int mode, String variable) {
-		// obtener valor de 'variable' de la BD
 		int result = -1;
 		try {
 			sentence = "Select value from variables where name = '" + variable + "' ";
@@ -91,8 +91,8 @@ public class Data {
 		return result;
 	}
 
+	// guardar valor de la variable en la BD
 	private void setValue(int mode, String variable, int value) {
-		// guardar valor de la variable en la BD
 		try {
 			if (mode == SHARE_LOCKING) {
 				throw new SQLException();
@@ -105,8 +105,8 @@ public class Data {
 		}
 	}
 
+	// incrementar M en la BD
 	private void increaseBarrier() {
-		// incrementar M en la BD
 		try {
 			Integer mValue = getValue(2, M);//siempre se reserva en exclusiva
 			mValue = mValue + 1;
@@ -126,8 +126,8 @@ public class Data {
 		}
 	}
 
+	// decrementar M de la BD
 	private void decreaseBarrier() {
-		// decrementar M de la BD
 		try {
 			Integer mValue;
 
@@ -149,11 +149,11 @@ public class Data {
 		}
 	}
 
+	// obtener el valor de M de la BD
 	private int getBarrierValue() {
-		// obtener el valor de M de la BD
 		int resultado=-1;
 		try {
-			 resultado=getValue(2, M);//EXCLUSIVE_MODE; SIEMPRE
+			 resultado=getValue(2, M);//siempre se reserva en exclusiva
 			 conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -168,8 +168,8 @@ public class Data {
 		return resultado;
 	}
 
+	// poner a 0 todos los valores de la BD
 	public void initializeSharedVariables() {
-		// poner a 0 todos los valores de la BD
 		try {
 			String SentenciaSQL = "UPDATE `variables` SET `value`= 0;";
 			st.executeUpdate(SentenciaSQL);
