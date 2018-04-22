@@ -20,19 +20,14 @@ public class ThreadD extends Thread {
 	public void run() {
 
 		int counter = 0;
-		Boolean committed=false;
+		Boolean committed;
 
 		myData.synchronyze();
 
 		System.out.println("Go " + myName + "!!!");
 
 		while (counter < Data.NUMBER_OF_ITERATIONS) {
-			try {
 				committed = myData.procedureD(myName, counter);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			if (committed == true)
 				counter = counter + 1;
 		}

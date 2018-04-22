@@ -16,7 +16,7 @@ public class Data {
 	static final int EXCLUSIVE_LOCKING = 2 * LOCKING; // WLOCK
 
 	static final int NUMBER_OF_ITERATIONS = 100; // nºvueltas por procedimiento
-	static final int NUMBER_OF_THREADS = 3; // nº max de hilos
+	static final int NUMBER_OF_THREADS = 6; // nº max de hilos
 
 	static final String X = "X";
 	static final String Y = "Y";
@@ -69,9 +69,8 @@ public class Data {
 	}
 
 	// obtener valor de 'variable' de la BD
-	private int getValue(int mode, String variable) {
+	private int getValue(int mode, String variable) throws SQLException {
 		int result = -1;
-		try {
 			sentence = "Select value from variables where name = '" + variable + "' ";
 			if (mode == EXCLUSIVE_LOCKING) {// exclusiva..
 				sentence += "for update;";
@@ -84,25 +83,17 @@ public class Data {
 			if (resultado.next()) {
 				result = resultado.getInt("value");
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return result;
 	}
 
 	// guardar valor de la variable en la BD
-	private void setValue(int mode, String variable, int value) {
-		try {
+	private void setValue(int mode, String variable, int value) throws SQLException {
+	
 			if (mode == SHARE_LOCKING) {
 				throw new SQLException();
 			}
-			sentence = "UPDATE variables SET value= " + value + " where name= '" + variable + "' ";
+			sentence = "UPDATE variables SET value= " + value + " where name= '" + variable + "'; ";
 			st.executeUpdate(sentence);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	// incrementar M en la BD
@@ -205,7 +196,7 @@ public class Data {
 		decreaseBarrier();
 	}
 
-	public Boolean procedureA(String myName, int counter) throws SQLException {
+	public Boolean procedureA(String myName, int counter)  {
 		try {
 			String name = myName;
 			int i = counter;
@@ -218,15 +209,15 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			aValue = getValue(EXCLUSIVE_MODE, A);
 			yValue = getValue(SHARE_MODE, Y);
-			//tValue = tValue + yValue;
-			tValue = tValue + 1;
+			tValue = tValue + yValue;
+			//tValue = tValue + 1;
 			aValue = aValue + yValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, A, aValue);
-			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");
+					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");
+			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + A + ","
 					+ Integer.toString(aValue - yValue) + "," + Integer.toString(aValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
@@ -235,12 +226,17 @@ public class Data {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return false;
 		}
 	}
 
-	public Boolean procedureB(String myName, int counter) throws SQLException {
+	public Boolean procedureB(String myName, int counter){
 		try {
 			String name = myName;
 			int i = counter;
@@ -253,15 +249,15 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			bValue = getValue(EXCLUSIVE_MODE, B);
 			zValue = getValue(SHARE_MODE, Z);
-			//tValue = tValue + zValue;
-			tValue = tValue + 1;
+			tValue = tValue + zValue;
+			//tValue = tValue + 1;
 			bValue = bValue + zValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, B, bValue);
-			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");
+					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");
+			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + B + ","
 					+ Integer.toString(bValue - zValue) + "," + Integer.toString(bValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
@@ -270,13 +266,18 @@ public class Data {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return false;
 		}
 
 	}
 
-	public Boolean procedureC(String myName, int counter) throws SQLException {
+	public Boolean procedureC(String myName, int counter) {
 		try {
 			String name = myName;
 			int i = counter;
@@ -289,15 +290,15 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			cValue = getValue(EXCLUSIVE_MODE, C);
 			xValue = getValue(SHARE_MODE, X);
-			//tValue = tValue + xValue;
-			tValue = tValue + 1;
+			tValue = tValue + xValue;
+			//tValue = tValue + 1;
 			cValue = cValue + xValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, C, cValue);
-			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");
+					+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");
+			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + B + ","
 					+ Integer.toString(cValue - xValue) + "," + Integer.toString(cValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
@@ -306,12 +307,17 @@ public class Data {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return false;
 		}
 	}
 
-	public Boolean procedureD(String myName, int counter) throws SQLException {
+	public Boolean procedureD(String myName, int counter) {
 		try {
 			String name = myName;
 			int i = counter;
@@ -319,10 +325,10 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			dValue = getValue(EXCLUSIVE_MODE, D);
 			zValue = getValue(SHARE_MODE, Z);
-			//tValue = tValue + zValue;
-			tValue = tValue + 1;
+			tValue = tValue + zValue;
+			//tValue = tValue + 1;
 			dValue = dValue + zValue;
-			//setValue(EXCLUSIVE_MODE, T, tValue);
+			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, D, dValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");
@@ -339,13 +345,18 @@ public class Data {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return false;
 		}
 
 	}
 
-	public Boolean procedureE(String myName, int counter) throws SQLException {
+	public Boolean procedureE(String myName, int counter) {
 		try {
 			String name = myName;
 			int i = counter;
@@ -353,10 +364,10 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			eValue = getValue(EXCLUSIVE_MODE, E);
 			xValue = getValue(SHARE_MODE, X);
-			//tValue = tValue + xValue;
-			tValue = tValue + 1;
+			tValue = tValue + xValue;
+			//tValue = tValue + 1;
 			eValue = eValue + xValue;
-			//setValue(EXCLUSIVE_MODE, T, tValue);
+			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, E, eValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");
@@ -373,12 +384,17 @@ public class Data {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return false;
 		}
 	}
 
-	public Boolean procedureF(String myName, int counter) throws SQLException {
+	public Boolean procedureF(String myName, int counter) {
 		try {
 			String name = myName;
 			int i = counter;
@@ -386,10 +402,10 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			fValue = getValue(EXCLUSIVE_MODE, F);
 			yValue = getValue(SHARE_MODE, Y);
-			//tValue = tValue + yValue;
-			tValue = tValue + 1;
+			tValue = tValue + yValue;
+			//tValue = tValue + 1;
 			fValue = fValue + yValue;
-			//setValue(EXCLUSIVE_MODE, T, tValue);
+			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, F, fValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");
@@ -406,22 +422,34 @@ public class Data {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return false;
 		}
 	}
 
 	public void showInitialValues() {
-		System.out.println("Initial value of " + X + ": " + Integer.toString(getValue(NONLOCKING, X)));
+		try {
+			System.out.println("Initial value of " + X + ": " + Integer.toString(getValue(NONLOCKING, X)));
 		System.out.println("Initial value of " + Y + ": " + Integer.toString(getValue(NONLOCKING, Y)));
 		System.out.println("Initial value of " + Z + ": " + Integer.toString(getValue(NONLOCKING, Z)));
-		System.out.println("Initial value of " + T + ": " + Integer.toString(getValue(NONLOCKING, T)));
 		System.out.println("Initial value of " + A + ": " + Integer.toString(getValue(NONLOCKING, A)));
 		System.out.println("Initial value of " + B + ": " + Integer.toString(getValue(NONLOCKING, B)));
 		System.out.println("Initial value of " + C + ": " + Integer.toString(getValue(NONLOCKING, C)));
 		System.out.println("Initial value of " + D + ": " + Integer.toString(getValue(NONLOCKING, D)));
 		System.out.println("Initial value of " + E + ": " + Integer.toString(getValue(NONLOCKING, E)));
 		System.out.println("Initial value of " + F + ": " + Integer.toString(getValue(NONLOCKING, F)));
+		
+			System.out.println("Initial value of " + T + ": " + Integer.toString(getValue(NONLOCKING, T)));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public Boolean showFinalValues() {
@@ -444,9 +472,10 @@ public class Data {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, X)));
-		System.out.println("Final value of " + Y + ": " + Integer.toString(getValue(NONLOCKING, Y)));
-		System.out.println("Final value of " + Z + ": " + Integer.toString(getValue(NONLOCKING, Z)));
+		
+		try {
+			System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, X)));
+		System.out.println("Final value of " + Y + ": " + Integer.toString(getValue(NONLOCKING, Y)));System.out.println("Final value of " + Z + ": " + Integer.toString(getValue(NONLOCKING, Z)));
 		System.out.println("Final value of " + T + ": " + Integer.toString(getValue(NONLOCKING, T)));
 		System.out.println("Final value of " + A + ": " + Integer.toString(getValue(NONLOCKING, A)));
 		System.out.println("Final value of " + B + ": " + Integer.toString(getValue(NONLOCKING, B)));
@@ -463,6 +492,11 @@ public class Data {
 								+ Integer.toString(getValue(NONLOCKING, A) + getValue(NONLOCKING, B)
 										+ getValue(NONLOCKING, C) + getValue(NONLOCKING, D) + getValue(NONLOCKING, E)
 										+ getValue(NONLOCKING, F)));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return true;
 
 	}
