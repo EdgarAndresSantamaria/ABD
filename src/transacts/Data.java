@@ -35,10 +35,10 @@ public class Data {
 	int EXCLUSIVE_MODE;
 
 	// private config temporal BD Connection
-	private String serverAddress = "10.0.2.15";
+	private String serverAddress = "192.168.56.10";
 	private String port = "3306";
 	private String bd = "concurrency_control";
-	private String user = "concurrency_control";
+	private String user = "concurrency_contro";
 	private String password = "hola";
 	private Connection conn;
 	private Statement st;
@@ -101,18 +101,14 @@ public class Data {
 																	// TERMINAR)
 		// update de la 'variable' con el nuevo 'value'
 		try {
-<<<<<<< HEAD
 			sentence = "UPDATE variable SET value= " + value + " where name= '"+ variable +"' ";
-			if (mode == SHARE_LOCKING) {//si reserva exclusiva..
+			/**if (mode == SHARE_LOCKING) {//si reserva exclusiva..
 				sentence += "for update;";
 			} else if(mode == EXCLUSIVE_LOCKING) {//si reserva compartida..
 				sentence += "lock in share mode;";
 			}else {//sin reservas...
 				sentence += ";";
-			}
-=======
-			sentence = "UPDATE variable SET value= " + value + " where name= '"+ variable +"';";
->>>>>>> 0664525c5fff0ce5c2d524467cb5eb4257b36da5
+			}*/
 			st.executeUpdate(sentence);
 			//String SentenciaSQL = "UPDATE variable SET value= " + value + " where name= '" + variable + "';";
 		} catch (SQLException e) {
