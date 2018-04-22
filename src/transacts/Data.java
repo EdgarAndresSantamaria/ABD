@@ -67,11 +67,11 @@ public class Data {
 
 	}
 
-	private int getValue(int mode, String x2) {// CAMBIAR MODO (SIN// TERMINAR)
+	private int getValue(int mode, String variable) {// CAMBIAR MODO (SIN// TERMINAR)
 		// recuperar valor contenido en variable 'x2'
 		int result = -1;
 		try {
-			sentence = "Select value from variables where name = '" + x2 + "' ";
+			sentence = "Select value from variables where name = '" + variable + "' ";
 			if (mode == EXCLUSIVE_LOCKING) {// si reserva exclusiva..
 				sentence += "for update;";
 			} else if (mode == SHARE_LOCKING) {// si reserva compartida..
@@ -220,12 +220,15 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			aValue = getValue(EXCLUSIVE_MODE, A);
 			yValue = getValue(SHARE_MODE, Y);
-			tValue = tValue + yValue;
+			//tValue = tValue + yValue;
+			tValue = tValue + 1;
 			aValue = aValue + yValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, A, aValue);
+			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");
+					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + A + ","
 					+ Integer.toString(aValue - yValue) + "," + Integer.toString(aValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
@@ -253,12 +256,15 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			bValue = getValue(EXCLUSIVE_MODE, B);
 			zValue = getValue(SHARE_MODE, Z);
-			tValue = tValue + zValue;
+			//tValue = tValue + zValue;
+			tValue = tValue + 1;
 			bValue = bValue + zValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, B, bValue);
+			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");
+					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + B + ","
 					+ Integer.toString(bValue - zValue) + "," + Integer.toString(bValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
@@ -287,12 +293,15 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			cValue = getValue(EXCLUSIVE_MODE, C);
 			xValue = getValue(SHARE_MODE, X);
-			tValue = tValue + xValue;
+			//tValue = tValue + xValue;
+			tValue = tValue + 1;
 			cValue = cValue + xValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, C, cValue);
+			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+					+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");
+					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + B + ","
 					+ Integer.toString(cValue - xValue) + "," + Integer.toString(cValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
@@ -315,9 +324,10 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			dValue = getValue(EXCLUSIVE_MODE, D);
 			zValue = getValue(SHARE_MODE, Z);
-			tValue = tValue + zValue;
+			//tValue = tValue + zValue;
+			tValue = tValue + 1;
 			dValue = dValue + zValue;
-			setValue(EXCLUSIVE_MODE, T, tValue);
+			//setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, D, dValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");
@@ -350,9 +360,10 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			eValue = getValue(EXCLUSIVE_MODE, E);
 			xValue = getValue(SHARE_MODE, X);
-			tValue = tValue + xValue;
+			//tValue = tValue + xValue;
+			tValue = tValue + 1;
 			eValue = eValue + xValue;
-			setValue(EXCLUSIVE_MODE, T, tValue);
+			//setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, E, eValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");
@@ -383,9 +394,10 @@ public class Data {
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			fValue = getValue(EXCLUSIVE_MODE, F);
 			yValue = getValue(SHARE_MODE, Y);
-			tValue = tValue + yValue;
+			//tValue = tValue + yValue;
+			tValue = tValue + 1;
 			fValue = fValue + yValue;
-			setValue(EXCLUSIVE_MODE, T, tValue);
+			//setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, F, fValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");
