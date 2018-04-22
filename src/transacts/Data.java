@@ -9,15 +9,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Data {
 
-	static final int NONLOCKING = 0; // se trabaja sin reservas
-	static final int LOCKING = 1; // se trabaja utilizando reservas
+	static final int NONLOCKING = 0; // Sin reserva
+	static final int LOCKING = 1; // Con reserva
 
 	static final int SHARE_LOCKING = LOCKING; // RLOCK
 	static final int EXCLUSIVE_LOCKING = 2 * LOCKING; // WLOCK
 
-	static final int NUMBER_OF_ITERATIONS = 100; // num de iteraciones por cada
-													// transaccion
-	static final int NUMBER_OF_THREADS = 3; // numero de hilos maximo
+	static final int NUMBER_OF_ITERATIONS = 100; // nºvueltas por procedimiento
+	static final int NUMBER_OF_THREADS = 1; // nº max de hilos
 
 	static final String X = "X";
 	static final String Y = "Y";
@@ -38,7 +37,7 @@ public class Data {
 	private String serverAddress = "192.168.56.10";
 	private String port = "3306";
 	private String bd = "concurrency_control";
-	private String user = "concurrency_contro";
+	private String user = "concurrency_control";
 	private String password = "hola";
 	private Connection conn;
 	private Statement st;
@@ -68,18 +67,18 @@ public class Data {
 
 	}
 
-	private int getValue(int nonlocking2, String x2) {// CAMBIAR MODO (SIN
+	private int getValue(int mode, String x2) {// CAMBIAR MODO (SIN
 														// TERMINAR)
 		// recuperar valor contenido en variable 'x2'
 		int result = -1;
 		try {
-			sentence = "Select value from variable where name = '" + x2 + "' ";
-			if (nonlocking2 == SHARE_LOCKING) {//si reserva exclusiva..
+			sentence = "Select value from variables where name = '" + x2 + "' ";
+			if (mode == EXCLUSIVE_LOCKING) {//si reserva exclusiva..
 				System.out.println("reservada en exclusiva... "+x2);
 				sentence += "for update;";
-			} else if(nonlocking2 == EXCLUSIVE_LOCKING) {//si reserva compartida..
+			} else if(mode == SHARE_LOCKING) {//si reserva compartida..
 				System.out.println("reservada en compartido... "+x2);
-				sentence += "for share ;";
+				sentence += "lock in share mode;";
 			}else {//sin reservas...
 				System.out.println("recuperada sin reservas... "+x2);
 				sentence += ";";
@@ -101,16 +100,8 @@ public class Data {
 																	// TERMINAR)
 		// update de la 'variable' con el nuevo 'value'
 		try {
-			sentence = "UPDATE variable SET value= " + value + " where name= '"+ variable +"' ";
-			/**if (mode == SHARE_LOCKING) {//si reserva exclusiva..
-				sentence += "for update;";
-			} else if(mode == EXCLUSIVE_LOCKING) {//si reserva compartida..
-				sentence += "lock in share mode;";
-			}else {//sin reservas...
-				sentence += ";";
-			}*/
+			sentence = "UPDATE variables SET value= " + value + " where name= '"+ variable +"' ";
 			st.executeUpdate(sentence);
-			//String SentenciaSQL = "UPDATE variable SET value= " + value + " where name= '" + variable + "';";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -142,7 +133,7 @@ public class Data {
 	public void initializeSharedVariables() {
 		// codigo que inicialice x,y,z,t,a,b,c,d,e,f,m a 0
 		try {
-			String SentenciaSQL = "UPDATE `variable` SET `value`= 0;";
+			String SentenciaSQL = "UPDATE `variables` SET `value`= 0;";
 			st.executeUpdate(SentenciaSQL);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
