@@ -33,16 +33,17 @@ public class Data {
 	int SHARE_MODE;
 	int EXCLUSIVE_MODE;
 
-	// private config temporal BD Connection
+	private Connection conn;
+	private Statement st;
+	private String sentence;
+	private ResultSet resultado;
+
+	// datos para la conexion con la BD
 	private String serverAddress = "192.168.56.10";
 	private String port = "3306";
 	private String bd = "concurrency_control";
 	private String user = "concurrency_control";
 	private String password = "hola";
-	private Connection conn;
-	private Statement st;
-	private String sentence;
-	private ResultSet resultado;
 
 	public Data(int myShareMode, int myExclusiveMode) {
 		SHARE_MODE = myShareMode;
@@ -56,7 +57,7 @@ public class Data {
 			e.printStackTrace();
 		}
 
-		// Open connection
+		// abrir conexion
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://" + serverAddress + ":" + port + "/" + bd, user, password);
 			conn.setAutoCommit(false);
@@ -67,14 +68,14 @@ public class Data {
 
 	}
 
-	private int getValue(int mode, String variable) {// CAMBIAR MODO (SIN// TERMINAR)
-		// recuperar valor contenido en variable 'x2'
+	private int getValue(int mode, String variable) {
+		// obtener valor de 'variable' de la BD
 		int result = -1;
 		try {
 			sentence = "Select value from variables where name = '" + variable + "' ";
-			if (mode == EXCLUSIVE_LOCKING) {// si reserva exclusiva..
+			if (mode == EXCLUSIVE_LOCKING) {// exclusiva..
 				sentence += "for update;";
-			} else if (mode == SHARE_LOCKING) {// si reserva compartida..
+			} else if (mode == SHARE_LOCKING) {// compartida..
 				sentence += "lock in share mode;";
 			} else {// sin reservas...
 				sentence += ";";
@@ -90,9 +91,8 @@ public class Data {
 		return result;
 	}
 
-	private void setValue(int mode, String variable, int value) {// CAMBIAR
-																	// MODO (SIN
-																	// TERMINAR)
+	private void setValue(int mode, String variable, int value) {
+		// guardar valor de la variable en la BD
 		try {
 			if (mode == SHARE_LOCKING) {
 				throw new SQLException();
@@ -106,11 +106,11 @@ public class Data {
 	}
 
 	private void increaseBarrier() {
-		// hacer una query que incremente M en la BD
+		// incrementar M en la BD
 		try {
-			Integer mValue = getValue(2, M);//EXCLUSIVE_MODE; SIEMPRE
+			Integer mValue = getValue(2, M);//siempre se reserva en exclusiva
 			mValue = mValue + 1;
-			setValue(2, M, mValue);//EXCLUSIVE_MODE; SIEMPRE
+			setValue(2, M, mValue);//siempre se reserva en exclusiva
 			System.out
 					.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
 			conn.commit();
@@ -127,11 +127,11 @@ public class Data {
 	}
 
 	private void decreaseBarrier() {
-		// hacer una query que decremente M de la BD
+		// decrementar M de la BD
 		try {
 			Integer mValue;
 
-			mValue = getValue(2, M);//EXCLUSIVE_MODE; SIEMPRE
+			mValue = getValue(2, M);//siempre se reserva en exclusiva
 			mValue = mValue - 1;
 			setValue(2, M, mValue);
 			System.out
@@ -150,6 +150,7 @@ public class Data {
 	}
 
 	private int getBarrierValue() {
+		// obtener el valor de M de la BD
 		int resultado=-1;
 		try {
 			 resultado=getValue(2, M);//EXCLUSIVE_MODE; SIEMPRE
@@ -168,7 +169,7 @@ public class Data {
 	}
 
 	public void initializeSharedVariables() {
-		// codigo que inicialice x,y,z,t,a,b,c,d,e,f,m a 0
+		// poner a 0 todos los valores de la BD
 		try {
 			String SentenciaSQL = "UPDATE `variables` SET `value`= 0;";
 			st.executeUpdate(SentenciaSQL);
@@ -187,7 +188,6 @@ public class Data {
 
 	public void synchronyze() {
 		int barrierValue;
-		// incrementa la m en 1
 		increaseBarrier();
 		barrierValue = getBarrierValue();
 		while (barrierValue < Data.NUMBER_OF_THREADS) {
@@ -202,13 +202,11 @@ public class Data {
 	}
 
 	public void finish() {
-		// decrementa la m en 1
 		decreaseBarrier();
 	}
 
 	public Boolean procedureA(String myName, int counter) throws SQLException {
 		try {
-			// generar codigo procedimiento A
 			String name = myName;
 			int i = counter;
 			Integer xValue, tValue, aValue, yValue;
@@ -244,7 +242,6 @@ public class Data {
 
 	public Boolean procedureB(String myName, int counter) throws SQLException {
 		try {
-			// generar codigo procedimiento B
 			String name = myName;
 			int i = counter;
 			Integer yValue, tValue, bValue, zValue;
@@ -281,7 +278,6 @@ public class Data {
 
 	public Boolean procedureC(String myName, int counter) throws SQLException {
 		try {
-			// generar codigo procedimiento C
 			String name = myName;
 			int i = counter;
 			Integer zValue, tValue, cValue, xValue;
@@ -316,7 +312,6 @@ public class Data {
 	}
 
 	public Boolean procedureD(String myName, int counter) throws SQLException {
-		// generar codigo procedimiento D
 		try {
 			String name = myName;
 			int i = counter;
@@ -339,7 +334,6 @@ public class Data {
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue + 1)
 					+ "," + Integer.toString(xValue) + ")");
 			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
-
 			conn.commit();
 			return true;
 		} catch (SQLException e) {
@@ -352,7 +346,6 @@ public class Data {
 	}
 
 	public Boolean procedureE(String myName, int counter) throws SQLException {
-		// generar codigo procedimiento E
 		try {
 			String name = myName;
 			int i = counter;
@@ -386,7 +379,6 @@ public class Data {
 	}
 
 	public Boolean procedureF(String myName, int counter) throws SQLException {
-		// generar codigo procedimiento F
 		try {
 			String name = myName;
 			int i = counter;
@@ -434,9 +426,7 @@ public class Data {
 
 	public Boolean showFinalValues() {
 		int barrierValue;
-
 		barrierValue = getBarrierValue();
-
 		while (barrierValue < 1) {
 			try {
 				Thread.sleep(ThreadLocalRandom.current().nextInt(1, 11));
@@ -454,7 +444,6 @@ public class Data {
 				e.printStackTrace();
 			}
 		}
-
 		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, X)));
 		System.out.println("Final value of " + Y + ": " + Integer.toString(getValue(NONLOCKING, Y)));
 		System.out.println("Final value of " + Z + ": " + Integer.toString(getValue(NONLOCKING, Z)));
@@ -465,7 +454,6 @@ public class Data {
 		System.out.println("Final value of " + D + ": " + Integer.toString(getValue(NONLOCKING, D)));
 		System.out.println("Final value of " + E + ": " + Integer.toString(getValue(NONLOCKING, E)));
 		System.out.println("Final value of " + F + ": " + Integer.toString(getValue(NONLOCKING, F)));
-
 		System.out.println("Expected final value of " + X + ": " + Integer.toString(0));
 		System.out.println("Expected final value of " + Y + ": " + Integer.toString(0));
 		System.out.println("Expected final value of " + Z + ": " + Integer.toString(0));
@@ -475,7 +463,6 @@ public class Data {
 								+ Integer.toString(getValue(NONLOCKING, A) + getValue(NONLOCKING, B)
 										+ getValue(NONLOCKING, C) + getValue(NONLOCKING, D) + getValue(NONLOCKING, E)
 										+ getValue(NONLOCKING, F)));
-
 		return true;
 
 	}
