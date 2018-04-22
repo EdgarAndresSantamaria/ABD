@@ -16,7 +16,7 @@ public class Data {
 	static final int EXCLUSIVE_LOCKING = 2 * LOCKING; // WLOCK
 
 	static final int NUMBER_OF_ITERATIONS = 100; // nºvueltas por procedimiento
-	static final int NUMBER_OF_THREADS = 1; // nº max de hilos
+	static final int NUMBER_OF_THREADS = 3; // nº max de hilos
 
 	static final String X = "X";
 	static final String Y = "Y";
@@ -37,7 +37,7 @@ public class Data {
 	private String serverAddress = "192.168.56.10";
 	private String port = "3306";
 	private String bd = "concurrency_control";
-	private String user = "concurrency_contro";
+	private String user = "concurrency_control";
 	private String password = "hola";
 	private Connection conn;
 	private Statement st;
@@ -67,54 +67,38 @@ public class Data {
 
 	}
 
-	private int getValue(int mode, String x2) {// CAMBIAR MODO (SIN
-														// TERMINAR)
+	private int getValue(int mode, String x2) {// CAMBIAR MODO (SIN// TERMINAR)
 		// recuperar valor contenido en variable 'x2'
 		int result = -1;
 		try {
 			sentence = "Select value from variables where name = '" + x2 + "' ";
-			if (mode == EXCLUSIVE_LOCKING) {//si reserva exclusiva..
-				System.out.println("reservada en exclusiva... "+x2);
+			if (mode == EXCLUSIVE_LOCKING) {// si reserva exclusiva..
 				sentence += "for update;";
-			} else if(mode == SHARE_LOCKING) {//si reserva compartida..
-				System.out.println("reservada en compartido... "+x2);
+			} else if (mode == SHARE_LOCKING) {// si reserva compartida..
 				sentence += "lock in share mode;";
-			}else {//sin reservas...
-				System.out.println("recuperada sin reservas... "+x2);
+			} else {// sin reservas...
 				sentence += ";";
 			}
 			resultado = st.executeQuery(sentence);
 			if (resultado.next()) {
-				result = resultado.getInt(1);
+				result = resultado.getInt("value");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		return result;
 	}
 
 	private void setValue(int mode, String variable, int value) {// CAMBIAR
 																	// MODO (SIN
 																	// TERMINAR)
-		// update de la 'variable' con el nuevo 'value'
 		try {
-<<<<<<< HEAD
-			sentence = "UPDATE variables SET value= " + value + " where name= '"+ variable +"' ";
-			st.executeUpdate(sentence);
-=======
-			sentence = "UPDATE variable SET value= " + value + " where name= '"+ variable +"' ;";
-			if (mode == SHARE_LOCKING) {//si reserva exclusiva..
-				sentence += "for update;";
-			} else if(mode == EXCLUSIVE_LOCKING) {//si reserva compartida..
-				sentence += "lock in share mode;";
-			}else {//sin reservas...
-				sentence += ";";
+			if (mode == SHARE_LOCKING) {
+				throw new SQLException();
 			}
+			sentence = "UPDATE variables SET value= " + value + " where name= '" + variable + "' ";
 			st.executeUpdate(sentence);
-			//String SentenciaSQL = "UPDATE variable SET value= " + value + " where name= '" + variable + "';";
->>>>>>> parent of 0664525... acabada revision codigo
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -123,40 +107,86 @@ public class Data {
 
 	private void increaseBarrier() {
 		// hacer una query que incremente M en la BD
-		Integer mValue = getValue(EXCLUSIVE_MODE, M);
-		System.out.println(mValue);
-		mValue ++;
-		setValue(EXCLUSIVE_MODE, M, mValue);
-		System.out.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
+		try {
+			Integer mValue = getValue(2, M);//EXCLUSIVE_MODE; SIEMPRE
+			mValue = mValue + 1;
+			setValue(2, M, mValue);//EXCLUSIVE_MODE; SIEMPRE
+			System.out
+					.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
+			conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	private void decreaseBarrier() {
 		// hacer una query que decremente M de la BD
-		Integer mValue;
-		mValue = getValue(EXCLUSIVE_MODE, M);
-		mValue --;
-		setValue(EXCLUSIVE_MODE, M, mValue);
-		System.out.println("WRITE( " + M + "," + Integer.toString(mValue + 1) + "," + Integer.toString(mValue) + ")");
+		try {
+			Integer mValue;
+
+			mValue = getValue(2, M);//EXCLUSIVE_MODE; SIEMPRE
+			mValue = mValue - 1;
+			setValue(2, M, mValue);
+			System.out
+					.println("WRITE( " + M + "," + Integer.toString(mValue + 1) + "," + Integer.toString(mValue) + ")");
+			conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	private int getBarrierValue() {
-		return getValue(SHARE_MODE, M);
+		int resultado=-1;
+		try {
+			 resultado=getValue(2, M);//EXCLUSIVE_MODE; SIEMPRE
+			 conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		return resultado;
 	}
-		
+
 	public void initializeSharedVariables() {
 		// codigo que inicialice x,y,z,t,a,b,c,d,e,f,m a 0
 		try {
 			String SentenciaSQL = "UPDATE `variables` SET `value`= 0;";
 			st.executeUpdate(SentenciaSQL);
+			conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
 	public void synchronyze() {
 		int barrierValue;
-
 		// incrementa la m en 1
 		increaseBarrier();
 		barrierValue = getBarrierValue();
@@ -183,10 +213,7 @@ public class Data {
 			int i = counter;
 			Integer xValue, tValue, aValue, yValue;
 			xValue = getValue(EXCLUSIVE_MODE, X);
-			System.out.println("Antes:"+xValue);
 			xValue = xValue + 1;
-
-			System.out.println("Despues:"+xValue);
 			setValue(EXCLUSIVE_MODE, X, xValue);
 			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue - 1)
 					+ "," + Integer.toString(xValue) + ")");
@@ -417,15 +444,15 @@ public class Data {
 		}
 
 		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, X)));
-		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, Y)));
-		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, Z)));
-		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, T)));
-		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, A)));
-		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, B)));
-		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, C)));
-		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, D)));
-		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, E)));
-		System.out.println("Final value of " + X + ": " + Integer.toString(getValue(NONLOCKING, F)));
+		System.out.println("Final value of " + Y + ": " + Integer.toString(getValue(NONLOCKING, Y)));
+		System.out.println("Final value of " + Z + ": " + Integer.toString(getValue(NONLOCKING, Z)));
+		System.out.println("Final value of " + T + ": " + Integer.toString(getValue(NONLOCKING, T)));
+		System.out.println("Final value of " + A + ": " + Integer.toString(getValue(NONLOCKING, A)));
+		System.out.println("Final value of " + B + ": " + Integer.toString(getValue(NONLOCKING, B)));
+		System.out.println("Final value of " + C + ": " + Integer.toString(getValue(NONLOCKING, C)));
+		System.out.println("Final value of " + D + ": " + Integer.toString(getValue(NONLOCKING, D)));
+		System.out.println("Final value of " + E + ": " + Integer.toString(getValue(NONLOCKING, E)));
+		System.out.println("Final value of " + F + ": " + Integer.toString(getValue(NONLOCKING, F)));
 
 		System.out.println("Expected final value of " + X + ": " + Integer.toString(0));
 		System.out.println("Expected final value of " + Y + ": " + Integer.toString(0));

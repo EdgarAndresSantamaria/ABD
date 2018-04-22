@@ -28,7 +28,7 @@ public class ThreadD extends Thread {
 
 		while (counter < Data.NUMBER_OF_ITERATIONS) {
 			try {
-				committed = myData.procedureA(myName, counter);
+				committed = myData.procedureD(myName, counter);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
