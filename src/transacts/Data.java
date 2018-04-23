@@ -16,7 +16,7 @@ public class Data {
 	static final int EXCLUSIVE_LOCKING = 2 * LOCKING; // WLOCK
 
 	static final int NUMBER_OF_ITERATIONS = 100; // nºvueltas por procedimiento
-	static final int NUMBER_OF_THREADS = 6; // nº max de hilos
+	static final int NUMBER_OF_THREADS = 3; // nº max de hilos
 
 	static final String X = "X";
 	static final String Y = "Y";
@@ -204,7 +204,7 @@ public class Data {
 			xValue = getValue(EXCLUSIVE_MODE, X);
 			xValue = xValue + 1;
 			setValue(EXCLUSIVE_MODE, X, xValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue - 1)
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue - 1)
 					+ "," + Integer.toString(xValue) + ")");
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			aValue = getValue(EXCLUSIVE_MODE, A);
@@ -214,13 +214,13 @@ public class Data {
 			aValue = aValue + yValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, A, aValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");
-			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+			/*System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");*/
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + A + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + A + ","
 					+ Integer.toString(aValue - yValue) + "," + Integer.toString(aValue) + ")");
-			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+			System.out.println("END_TRANSACTION " + name + Integer.toString(i + 1));
 			conn.commit();
 			return true;
 		} catch (SQLException e) {
@@ -244,7 +244,7 @@ public class Data {
 			yValue = getValue(EXCLUSIVE_MODE, Y);
 			yValue = yValue + 1;
 			setValue(EXCLUSIVE_MODE, Y, yValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Y + "," + Integer.toString(yValue - 1)
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + Y + "," + Integer.toString(yValue - 1)
 					+ "," + Integer.toString(yValue) + ")");
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			bValue = getValue(EXCLUSIVE_MODE, B);
@@ -254,13 +254,13 @@ public class Data {
 			bValue = bValue + zValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, B, bValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");
-			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+			/*System.out.println("WRITE( "+ name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");*/
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + B + ","
+			System.out.println("WRITE( " +name + Integer.toString(i + 1) + "," + B + ","
 					+ Integer.toString(bValue - zValue) + "," + Integer.toString(bValue) + ")");
-			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+			System.out.println("END_TRANSACTION " + name + Integer.toString(i + 1));
 			conn.commit();
 			return true;
 		} catch (SQLException e) {
@@ -285,7 +285,7 @@ public class Data {
 			zValue = getValue(EXCLUSIVE_MODE, Z);
 			zValue = zValue + 1;
 			setValue(EXCLUSIVE_MODE, Z, zValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Z + "," + Integer.toString(zValue - 1)
+			System.out.println("WRITE("+ name + Integer.toString(i + 1) + "," + Z + "," + Integer.toString(zValue - 1)
 					+ "," + Integer.toString(zValue) + ")");
 			tValue = getValue(EXCLUSIVE_MODE, T);
 			cValue = getValue(EXCLUSIVE_MODE, C);
@@ -295,13 +295,13 @@ public class Data {
 			cValue = cValue + xValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, C, cValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");
 			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");*/
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + B + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + B + ","
 					+ Integer.toString(cValue - xValue) + "," + Integer.toString(cValue) + ")");
-			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+			System.out.println("END_TRANSACTION " + name + Integer.toString(i + 1));
 			conn.commit();
 			return true;
 		} catch (SQLException e) {
@@ -330,16 +330,16 @@ public class Data {
 			dValue = dValue + zValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, D, dValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + D + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + D + ","
 					+ Integer.toString(dValue - zValue) + "," + Integer.toString(dValue) + ")");
 			xValue = getValue(EXCLUSIVE_MODE, X);
 			xValue = xValue - 1;
 			setValue(EXCLUSIVE_MODE, X, xValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue + 1)
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + X + "," + Integer.toString(xValue + 1)
 					+ "," + Integer.toString(xValue) + ")");
-			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+			System.out.println("END_TRANSACTION " + name + Integer.toString(i + 1));
 			conn.commit();
 			return true;
 		} catch (SQLException e) {
@@ -369,16 +369,16 @@ public class Data {
 			eValue = eValue + xValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, E, eValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + E + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + E + ","
 					+ Integer.toString(eValue - xValue) + "," + Integer.toString(eValue) + ")");
 			yValue = getValue(EXCLUSIVE_MODE, Y);
 			yValue = yValue - 1;
 			setValue(EXCLUSIVE_MODE, Y, yValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Y + "," + Integer.toString(yValue + 1)
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + Y + "," + Integer.toString(yValue + 1)
 					+ "," + Integer.toString(yValue) + ")");
-			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+			System.out.println("END_TRANSACTION " + name + Integer.toString(i + 1));
 			conn.commit();
 			return true;
 		} catch (SQLException e) {
@@ -407,16 +407,16 @@ public class Data {
 			fValue = fValue + yValue;
 			setValue(EXCLUSIVE_MODE, T, tValue);
 			setValue(EXCLUSIVE_MODE, F, fValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + E + ","
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + E + ","
 					+ Integer.toString(fValue - yValue) + "," + Integer.toString(fValue) + ")");
 			zValue = getValue(EXCLUSIVE_MODE, Z);
 			zValue = zValue - 1;
 			setValue(EXCLUSIVE_MODE, Z, zValue);
-			System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + Z + "," + Integer.toString(zValue + 1)
+			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + Z + "," + Integer.toString(zValue + 1)
 					+ "," + Integer.toString(zValue) + ")");
-			System.out.println("END_TRANSACTION" + name + Integer.toString(i + 1));
+			System.out.println("END_TRANSACTION " + name + Integer.toString(i + 1));
 			conn.commit();
 			return true;
 		} catch (SQLException e) {
