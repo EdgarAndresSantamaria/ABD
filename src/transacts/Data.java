@@ -103,7 +103,7 @@ public class Data {
 			mValue = mValue + 1;
 			setValue(2, M, mValue);//siempre se reserva en exclusiva
 			System.out
-					.println("WRITE( " + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
+					.println("WRITE(" + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
 			conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -126,7 +126,7 @@ public class Data {
 			mValue = mValue - 1;
 			setValue(2, M, mValue);
 			System.out
-					.println("WRITE( " + M + "," + Integer.toString(mValue + 1) + "," + Integer.toString(mValue) + ")");
+					.println("WRITE(" + M + "," + Integer.toString(mValue + 1) + "," + Integer.toString(mValue) + ")");
 			conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -258,7 +258,7 @@ public class Data {
 					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");
 			/*System.out.println("WRITE( "+ name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");*/
-			System.out.println("WRITE( " +name + Integer.toString(i + 1) + "," + B + ","
+			System.out.println("WRITE(" +name + Integer.toString(i + 1) + "," + B + ","
 					+ Integer.toString(bValue - zValue) + "," + Integer.toString(bValue) + ")");
 			System.out.println("END_TRANSACTION " + name + Integer.toString(i + 1));
 			conn.commit();
