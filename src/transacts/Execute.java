@@ -15,7 +15,7 @@ public class Execute {
 		ThreadE threadE = new ThreadE(MODE);
 		ThreadF threadF = new ThreadF(MODE);*/
 
-		mainData.initializeSharedVariables();
+		//mainData.initializeSharedVariables();
 		
 		//Ver el valor de las variables antes de la ejecucion
 		mainData.showInitialValues();

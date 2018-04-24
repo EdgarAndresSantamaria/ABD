@@ -16,7 +16,7 @@ public class Data {
 	static final int EXCLUSIVE_LOCKING = 2 * LOCKING; // WLOCK
 
 	static final int NUMBER_OF_ITERATIONS = 100; // nºvueltas por procedimiento
-	static final int NUMBER_OF_THREADS = 3; // nº max de hilos
+	static final int NUMBER_OF_THREADS = 6; // nº max de hilos
 
 	static final String X = "X";
 	static final String Y = "Y";
@@ -99,9 +99,9 @@ public class Data {
 	// incrementar M en la BD
 	private void increaseBarrier() {
 		try {
-			Integer mValue = getValue(2, M);//siempre se reserva en exclusiva
+			Integer mValue = getValue(EXCLUSIVE_LOCKING, M);//siempre se reserva en exclusiva
 			mValue = mValue + 1;
-			setValue(2, M, mValue);//siempre se reserva en exclusiva
+			setValue(EXCLUSIVE_LOCKING, M, mValue);//siempre se reserva en exclusiva
 			System.out
 					.println("WRITE(" + M + "," + Integer.toString(mValue - 1) + "," + Integer.toString(mValue) + ")");
 			conn.commit();
@@ -122,9 +122,9 @@ public class Data {
 		try {
 			Integer mValue;
 
-			mValue = getValue(2, M);//siempre se reserva en exclusiva
+			mValue = getValue(EXCLUSIVE_LOCKING, M);//siempre se reserva en exclusiva
 			mValue = mValue - 1;
-			setValue(2, M, mValue);
+			setValue(EXCLUSIVE_LOCKING, M, mValue);
 			System.out
 					.println("WRITE(" + M + "," + Integer.toString(mValue + 1) + "," + Integer.toString(mValue) + ")");
 			conn.commit();
@@ -144,7 +144,7 @@ public class Data {
 	private int getBarrierValue() {
 		int resultado=-1;
 		try {
-			 resultado=getValue(2, M);//siempre se reserva en exclusiva
+			 resultado=getValue(SHARE_LOCKING, M);//siempre se reserva en exclusiva
 			 conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -162,8 +162,8 @@ public class Data {
 	// poner a 0 todos los valores de la BD
 	public void initializeSharedVariables() {
 		try {
-			String SentenciaSQL = "UPDATE `variables` SET `value`= 0;";
-			st.executeUpdate(SentenciaSQL);
+			sentence = "UPDATE variables SET value= 0;";
+			st.executeUpdate(sentence);
 			conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -181,6 +181,7 @@ public class Data {
 		int barrierValue;
 		increaseBarrier();
 		barrierValue = getBarrierValue();
+		System.out.println();
 		while (barrierValue < Data.NUMBER_OF_THREADS) {
 			try {
 				Thread.sleep(ThreadLocalRandom.current().nextInt(1, 11));
@@ -216,8 +217,6 @@ public class Data {
 			setValue(EXCLUSIVE_MODE, A, aValue);
 			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - yValue) + "," + Integer.toString(tValue) + ")");
-			/*System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + A + ","
 					+ Integer.toString(aValue - yValue) + "," + Integer.toString(aValue) + ")");
 			System.out.println("END_TRANSACTION " + name + Integer.toString(i + 1));
@@ -256,8 +255,6 @@ public class Data {
 			setValue(EXCLUSIVE_MODE, B, bValue);
 			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - zValue) + "," + Integer.toString(tValue) + ")");
-			/*System.out.println("WRITE( "+ name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE(" +name + Integer.toString(i + 1) + "," + B + ","
 					+ Integer.toString(bValue - zValue) + "," + Integer.toString(bValue) + ")");
 			System.out.println("END_TRANSACTION " + name + Integer.toString(i + 1));
@@ -297,8 +294,6 @@ public class Data {
 			setValue(EXCLUSIVE_MODE, C, cValue);
 			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + T + ","
 					+ Integer.toString(tValue - xValue) + "," + Integer.toString(tValue) + ")");
-			/*System.out.println("WRITE( " + name + Integer.toString(i + 1) + "," + T + ","
-					+ Integer.toString(tValue - 1) + "," + Integer.toString(tValue) + ")");*/
 			System.out.println("WRITE(" + name + Integer.toString(i + 1) + "," + B + ","
 					+ Integer.toString(cValue - xValue) + "," + Integer.toString(cValue) + ")");
 			System.out.println("END_TRANSACTION " + name + Integer.toString(i + 1));
